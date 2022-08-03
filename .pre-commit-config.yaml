@@ -1,0 +1,18 @@
+repos:
+- repo: https://github.com/pycqa/isort
+  rev: 5.10.0
+  hooks:
+  - id: isort
+    args: ["--profile", "black"]
+- repo: https://github.com/python/black
+  rev: 22.3.0
+  hooks:
+  - id: black
+    pass_filenames: true
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 4.0.1
+  hooks:
+  - id: flake8
+    pass_filenames: true
+    # this seems to need to be here in addition to setup.cfg
+    exclude: __init__.py

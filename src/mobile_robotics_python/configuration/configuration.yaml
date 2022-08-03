@@ -1,0 +1,47 @@
+robot_name: pitop_robot
+
+sensors:
+  lidar:
+    name: pitop_lidar
+    driver: rplidar
+    parameters:
+      port: /dev/ttyUSB0
+      baudrate: 115200
+    pose:
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+
+  compass:
+    name: pitop_compass
+    driver: pitop_compass
+    pose:
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+
+  encoder:
+    name: pitop_encoder
+    driver: pitop_encoder
+    pose:
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+
+  external_positioning:
+    name: aruco_marker
+    driver: aruco_udp
+    pose:
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+
+
+motors:
+  left:
+    driver: pitop_motor
+    invert: false
+    parameters:
+      port: M3
+
+  right:
+    driver: pitop_motor
+    invert: true
+    parameters:
+      port: M0
