@@ -39,6 +39,7 @@ class Configuration(BaseModel):
     control: ControlConfiguration
     motors: EntryWithParams
     filename: str = None
+    logging_folder: Optional[str] = None
 
     def __init__(self, filename):
         if not Path(filename).exists():

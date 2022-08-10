@@ -3,15 +3,17 @@ from pathlib import Path
 
 
 class Logger:
-    def __init__(self):
-        self.filename = "./" + self.stamp() + "_log.csv"
-        self.filename = Path(self.filename)
+    def __init__(self, name: str, logging_folder: str):
+        filename = self.stamp() + "_" + name + "_log.csv"
+        if not Path(logging_folder).exists():
+            Path(logging_folder).mkdir(parents=True, exist_ok=True)
+        self.filename = Path(logging_folder) / filename
         self.file = self.filename.open("w")
         print("[Logger]: Creating logging file at", self.filename)
 
     @staticmethod
     def stamp():
-        stamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+        stamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         return str(stamp)
 
     def set_header(self, header):

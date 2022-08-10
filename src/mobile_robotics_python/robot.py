@@ -26,18 +26,20 @@ class Robot:
 
         # Check for sensors:
         if config.sensors.lidar is not None:
-            self.lidar = Lidar(config.sensors.lidar)
+            self.lidar = Lidar(config.sensors.lidar, config.logging_folder)
         if config.sensors.compass is not None:
-            self.compass = Compass(config.sensors.compass)
+            self.compass = Compass(config.sensors.compass, config.logging_folder)
         if config.sensors.encoder is not None:
-            self.encoder = Encoder(config.sensors.encoder)
+            self.encoder = Encoder(config.sensors.encoder, config.logging_folder)
         if config.sensors.external_positioning is not None:
             self.external_positioning = ExternalPositioning(
-                config.sensors.external_positioning
+                config.sensors.external_positioning, config.logging_folder
             )
 
         # Create controllers
-        self.localisation = Localisation(config.control.localisation)
+        self.localisation = Localisation(
+            config.control.localisation, config.logging_folder
+        )
         self.navigation = Navigation(config.control.navigation)
         self.mission_control = MissionControl(
             config.control.mission,
@@ -46,7 +48,7 @@ class Robot:
         )
 
         # Create motors
-        self.motors = Motors(config.motors)
+        self.motors = Motors(config.motors, config.logging_folder)
 
     def run(self):
         print("Running robot...")
@@ -67,8 +69,8 @@ class Robot:
             for measurement in sorted(measurements, key=lambda m: m.stamp_s):
                 self.state = self.localisation.update(measurement)
 
-            #print("State", self.state)
-            #print("current waypoint", self.mission_control.waypoint)
+            # print("State", self.state)
+            # print("current waypoint", self.mission_control.waypoint)
             print(self.mission_control.current_waypoint, self.state)
 
             self.mission_control.update(self.state)

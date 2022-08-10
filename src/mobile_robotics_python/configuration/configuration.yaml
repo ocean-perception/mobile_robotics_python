@@ -1,4 +1,5 @@
 robot_name: pitop_robot
+logging_folder: logs
 
 sensors:
   lidar:
