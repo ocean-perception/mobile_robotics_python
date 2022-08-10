@@ -38,6 +38,7 @@ def run_setup():
             "matplotlib",
             "pytransform3d",
             "pitop",
+            "pydantic",
         ],
         author="Ocean Perception - University of Southampton",
         author_email="miquel.massot-campos@soton.ac.uk",
