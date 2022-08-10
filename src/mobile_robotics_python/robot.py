@@ -67,13 +67,15 @@ class Robot:
             for measurement in sorted(measurements, key=lambda m: m.stamp_s):
                 self.state = self.localisation.update(measurement)
 
-            print("State", self.state)
+            #print("State", self.state)
+            #print("current waypoint", self.mission_control.waypoint)
+            print(self.mission_control.current_waypoint, self.state)
 
             self.mission_control.update(self.state)
             speed_request = self.navigation.compute_request(
                 self.state, self.mission_control.waypoint
             )
-            print(speed_request)
+            print("speed_request", speed_request)
             self.motors.move(speed_request)
 
             r.sleep()
