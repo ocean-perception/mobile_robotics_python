@@ -23,7 +23,7 @@ class PiTopCompass:
         gyro = self._imu.gyroscope
         ori = self._imu.orientation
         msg = RobotStateMessage()
-        msg.utc_stamp = get_utc_stamp()
+        msg.stamp_s = get_utc_stamp()
         msg.roll_rad = ori.roll
         msg.pitch_rad = ori.pitch
         msg.yaw_rad = ori.yaw
