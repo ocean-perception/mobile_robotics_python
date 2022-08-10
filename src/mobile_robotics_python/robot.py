@@ -41,18 +41,24 @@ class Robot:
         # Create motors
         self.motors = Motors(config.motors)
 
-    def read_sensors(self):
-        pass
-
-    def update_navigation(self):
-        pass
-
-    def actuate_motors(self):
-        pass
-
     def run(self):
         print("Running robot...")
         while not self.mission_control.finished:
-            self.read_sensors()
-            self.update_navigation()
-            self.actuate_motors()
+            # Read sensors
+            measurements = []
+            if self.compass is not None:
+                msg = self.compass.read()
+                measurements.append(msg)
+            if self.encoder is not None:
+                msg = self.encoder.read()
+                measurements.append(msg)
+
+            # Update navigation
+            for measurement in sorted(self.measurements, key=lambda m: m.stamp_s):
+                self.state = self.localisation.update(measurement)
+
+            speed_request = self.navigation.compute_request(
+                self.state, self.mission_control.current_waypoint
+            )
+
+            self.motors.move(speed_request)

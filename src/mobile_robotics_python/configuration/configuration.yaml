@@ -52,6 +52,11 @@ control:
   navigation:
     name: navigation
     driver: naive_rotate_and_move
+    parameters:
+      linear_speed: 0.1 # m/s
+      rotation_speed: 0.1 # rad/s
+      orientation_threshold: 0.01  # radians
+      position_threshold: 0.05  # m
 
 
 motors:

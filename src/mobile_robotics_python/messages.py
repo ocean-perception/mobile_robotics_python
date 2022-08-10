@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 """Empty message classes to agree on the message types.
 """
 
+from mobile_robotics_python.tools.time import get_utc_stamp
+
 
 @dataclass
 class LaserScanMessage:
@@ -20,6 +22,9 @@ class LaserScanMessage:
         default_factory=[]
     )  # intensity data [device-specific units]
 
+    def __post_init__(self):
+        self.stamp_s = get_utc_stamp()
+
 
 @dataclass
 class SpeedRequestMessage:
@@ -30,6 +35,9 @@ class SpeedRequestMessage:
     wx_radps: float = None
     wy_radps: float = None
     wz_radps: float = None
+
+    def __post_init__(self):
+        self.stamp_s = get_utc_stamp()
 
 
 @dataclass
@@ -50,3 +58,23 @@ class RobotStateMessage:
     ax_mpss: float = None  # linear acceleration in x [m/s^2]
     ay_mpss: float = None  # linear acceleration in y [m/s^2]
     az_mpss: float = None  # linear acceleration in z [m/s^2]
+
+    def __post_init__(self):
+        self.stamp_s = get_utc_stamp()
+
+    def all_zero(self):
+        self.x_m = 0
+        self.y_m = 0
+        self.z_m = 0
+        self.roll_rad = 0
+        self.pitch_rad = 0
+        self.yaw_rad = 0
+        self.vx_mps = 0
+        self.vy_mps = 0
+        self.vz_mps = 0
+        self.wx_radps = 0
+        self.wy_radps = 0
+        self.wz_radps = 0
+        self.ax_mpss = 0
+        self.ay_mpss = 0
+        self.az_mpss = 0
