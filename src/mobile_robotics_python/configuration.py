@@ -10,10 +10,13 @@ class PoseDict(BaseModel):
     rpy: List[float]
 
 
-class SensorConfiguration(BaseModel):
+class EntryWithParams(BaseModel):
     name: str
     driver: str
     parameters: Optional[dict] = None
+
+
+class SensorConfiguration(EntryWithParams):
     pose: PoseDict
 
 
@@ -24,21 +27,17 @@ class SensorsConfiguration(BaseModel):
     external_positioning: Optional[SensorConfiguration] = None
 
 
-class MotorConfiguration(BaseModel):
-    driver: str
-    parameters: dict
-    invert: bool
-
-
-class MotorsConfiguration(BaseModel):
-    left: MotorConfiguration
-    right: MotorConfiguration
+class ControlConfiguration(BaseModel):
+    mission: str
+    localisation: EntryWithParams
+    navigation: EntryWithParams
 
 
 class Configuration(BaseModel):
     robot_name: str
     sensors: SensorsConfiguration
-    motors: MotorsConfiguration
+    control: ControlConfiguration
+    motors: EntryWithParams
 
     def __init__(self, filename):
         if not Path(filename).exists():

@@ -3,12 +3,15 @@ from .configuration import SensorConfiguration
 from .sensor_drivers.rplidar import RPLidar
 from .sensor_drivers.pitop import PiTopCompass, PiTopEncoder
 from .sensor_drivers.aruco_udp import ArUcoUDP
-from .messages import (
-    LaserScanMessage,
-    CompassMessage,
-    ExternalPositioningMessage,
-    EncoderMessage,
-)
+from .messages import LaserScanMessage, RobotStateMessage
+
+
+class BaseTime:
+    def __init__(self):
+        self.time = 0.0
+
+    def update(self, dt):
+        self.time += dt
 
 
 class BaseSensor:
@@ -49,7 +52,7 @@ class Compass(BaseSensor):
         else:
             print(f"Unknown compass driver {self.driver}")
 
-    def read(self) -> CompassMessage:
+    def read(self) -> RobotStateMessage:
         return self._impl.read()
 
 
@@ -61,7 +64,7 @@ class Encoder(BaseSensor):
         else:
             print(f"Unknown encoder driver {self.driver}")
 
-    def read(self) -> EncoderMessage:
+    def read(self) -> RobotStateMessage:
         return self._impl.read()
 
 
@@ -73,5 +76,5 @@ class ExternalPositioning(BaseSensor):
         else:
             print(f"Unknown compass driver {self.driver}")
 
-    def read(self) -> ExternalPositioningMessage:
+    def read(self) -> RobotStateMessage:
         return self._impl.read()

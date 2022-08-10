@@ -21,6 +21,16 @@ sensors:
   encoder:
     name: pitop_encoder
     driver: pitop_encoder
+    parameters:
+      wheel_separation: 0.163
+      left:
+        port: M3
+        invert: false
+        wheel_diameter: 0.072
+      right:
+        port: M0
+        invert: true
+        wheel_diameter: 0.072
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
@@ -32,16 +42,26 @@ sensors:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
 
+control:
+  mission: square_1m.yaml
+  localisation:
+    name: localisation
+    driver: dead_reckoning
+  navigation:
+    name: navigation
+    driver: naive_rotate_and_move
+
 
 motors:
-  left:
-    driver: pitop_motor
-    invert: false
-    parameters:
+  name: pitop_motors
+  driver: pitop_motors
+  parameters:
+    wheel_separation: 0.163
+    left:
       port: M3
-
-  right:
-    driver: pitop_motor
-    invert: true
-    parameters:
+      invert: false
+      wheel_diameter: 0.072
+    right:
       port: M0
+      invert: true
+      wheel_diameter: 0.072

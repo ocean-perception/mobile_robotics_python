@@ -15,6 +15,7 @@ def main():
 
     c = Configuration(args.configuration)
     robot = Robot(c)
+    robot.run()
 
 
 if __name__ == "__main__":
