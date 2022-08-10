@@ -1,5 +1,6 @@
-from mobile_robotics_python.messages import RobotStateMessage
 from typing import Optional
+
+from mobile_robotics_python.messages import RobotStateMessage
 
 
 class DeadReckoning:
@@ -15,7 +16,8 @@ class DeadReckoning:
         """
         self.parameters = parameters
         if initial_state is None:
-            self.state = RobotStateMessage().all_zero()
+            self.state = RobotStateMessage()
+            self.state.all_zero()
         else:
             self.state = initial_state
 
@@ -26,18 +28,24 @@ class DeadReckoning:
         self.state.x_m = (
             self.state.x_m
             + self.state.vx_mps * dt_s
-            + 0.5 * self.state.ax_mps * dt_s ** 2
+            + 0.5 * self.state.ax_mpss * dt_s**2
         )
         self.state.y_m = (
             self.state.y_m
             + self.state.vy_mps * dt_s
-            + 0.5 * self.state.ay_mps * dt_s ** 2
+            + 0.5 * self.state.ay_mpss * dt_s**2
         )
-        self.state.theta_rad = self.state.theta_rad + self.state.wz_radps * dt_s
 
         return self.state
 
     def update(self, msg: RobotStateMessage) -> RobotStateMessage:
+        # TODO make this update generic for all fields
+        if msg.roll_rad is not None:
+            self.state.roll_rad = msg.roll_rad
+        if msg.pitch_rad is not None:
+            self.state.pitch_rad = msg.pitch_rad
+        if msg.yaw_rad is not None:
+            self.state.yaw_rad = msg.yaw_rad
         if msg.vx_mps is not None:
             self.state.vx_mps = msg.vx_mps
         if msg.vy_mps is not None:

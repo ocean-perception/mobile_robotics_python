@@ -19,3 +19,6 @@ class PiTopMotors:
 
     def move(self, msg: SpeedRequestMessage):
         self._ctrl.robot_move(msg.vx_mps, msg.wz_radps)
+
+    def __del__(self):
+        self._ctrl.stop()

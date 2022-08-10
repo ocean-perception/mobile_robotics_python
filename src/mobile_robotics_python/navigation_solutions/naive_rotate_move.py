@@ -16,14 +16,17 @@ class NaiveRotateMove:
         self, current_position: RobotStateMessage, desired_position: RobotStateMessage
     ) -> SpeedRequestMessage:
 
-        diff_x = desired_position.x - current_position.x
-        diff_y = desired_position.y - current_position.y
+        diff_x = desired_position.x_m - current_position.x_m
+        diff_y = desired_position.y_m - current_position.y_m
         desired_theta = np.arctan2(diff_y, diff_x)
-        diff_theta = desired_theta - current_position.theta
+        print("Desired theta:", desired_theta)
+        diff_theta = desired_theta - current_position.yaw_rad
         distance = (diff_x**2 + diff_y**2) ** 0.5
 
         msg = SpeedRequestMessage()
         msg.stamp_s = get_utc_stamp()
+        msg.vx_mps = 0
+        msg.wz_radps = 0
         if abs(diff_theta) > self.orientation_threshold:
             msg.wz_radps = self.rotation_speed * np.sign(diff_theta)
             return msg
@@ -31,3 +34,4 @@ class NaiveRotateMove:
         if distance > self.position_threshold:
             msg.vx_mps = self.linear_speed * np.sign(diff_x) * np.sign(diff_y)
             return msg
+        return msg

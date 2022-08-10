@@ -40,7 +40,9 @@ class Robot:
         self.localisation = Localisation(config.control.localisation)
         self.navigation = Navigation(config.control.navigation)
         self.mission_control = MissionControl(
-            config.control.mission, Path(config.filename).parent / "missions"
+            config.control.mission,
+            Path(config.filename).parent / "missions",
+            waypoint_threshold=0.1,
         )
 
         # Create motors
@@ -56,22 +58,22 @@ class Robot:
             measurements = []
             if self.compass is not None:
                 msg = self.compass.read()
-                print("Compass message:", msg)
                 measurements.append(msg)
             if self.encoder is not None:
                 msg = self.encoder.read()
-                print("Encoder message:", msg)
                 measurements.append(msg)
 
             # Update navigation
             for measurement in sorted(measurements, key=lambda m: m.stamp_s):
                 self.state = self.localisation.update(measurement)
 
-            r.sleep()
-            continue
+            print("State", self.state)
 
+            self.mission_control.update(self.state)
             speed_request = self.navigation.compute_request(
                 self.state, self.mission_control.waypoint
             )
-
+            print(speed_request)
             self.motors.move(speed_request)
+
+            r.sleep()
