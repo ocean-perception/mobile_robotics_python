@@ -1,10 +1,9 @@
-from pitop import EncoderMotor, ForwardDirection, BrakingType
-from pitop.pma.imu import IMU
-from mobile_robotics_python.messages import RobotStateMessage, SpeedRequestMessage
-
-from mobile_robotics_python.tools.time import get_utc_stamp
-
 import numpy as np
+from pitop import EncoderMotor, ForwardDirection
+from pitop.pma.imu import IMU
+
+from mobile_robotics_python.messages import RobotStateMessage
+from mobile_robotics_python.tools.time import get_utc_stamp
 
 
 class PiTopCompass:
@@ -24,15 +23,15 @@ class PiTopCompass:
         ori = self._imu.orientation
         msg = RobotStateMessage()
         msg.stamp_s = get_utc_stamp()
-        msg.roll_rad = ori.roll
-        msg.pitch_rad = ori.pitch
-        msg.yaw_rad = ori.yaw
-        msg.wx_radps = gyro.x
-        msg.wy_radps = gyro.y
-        msg.wz_radps = gyro.z
-        msg.ax_mpss = acc.x
-        msg.ay_mpss = acc.y
-        msg.az_mpss = acc.z
+        msg.roll_rad = np.radians(ori.roll)
+        msg.pitch_rad = np.radians(ori.pitch)
+        msg.yaw_rad = np.radians(ori.yaw)
+        msg.wx_radps = np.radians(gyro.x)
+        msg.wy_radps = np.radians(gyro.y)
+        msg.wz_radps = np.radians(gyro.z)
+        msg.ax_mpss = acc.x / 9.81
+        msg.ay_mpss = acc.y / 9.81
+        msg.az_mpss = acc.z / 9.81
         return msg
 
 

@@ -1,13 +1,14 @@
-import numpy as np
-from .configuration import Configuration
-from pytransform3d.transform_manager import TransformManager
-from .sensors import Lidar, Compass, Encoder, ExternalPositioning
-from .motors import Motors
-from .localisation import Localisation
-from .navigation import Navigation
-from .mission_control import MissionControl
-
 from pathlib import Path
+
+from pytransform3d.transform_manager import TransformManager
+
+from .configuration import Configuration
+from .localisation import Localisation
+from .mission_control import MissionControl
+from .motors import Motors
+from .navigation import Navigation
+from .sensors import Compass, Encoder, ExternalPositioning, Lidar
+from .tools.rate import Rate
 
 
 class Robot:
@@ -47,19 +48,27 @@ class Robot:
 
     def run(self):
         print("Running robot...")
+
+        r = Rate(10.0)
+
         while not self.mission_control.finished:
             # Read sensors
             measurements = []
             if self.compass is not None:
                 msg = self.compass.read()
+                print("Compass message:", msg)
                 measurements.append(msg)
             if self.encoder is not None:
                 msg = self.encoder.read()
+                print("Encoder message:", msg)
                 measurements.append(msg)
 
             # Update navigation
             for measurement in sorted(measurements, key=lambda m: m.stamp_s):
                 self.state = self.localisation.update(measurement)
+
+            r.sleep()
+            continue
 
             speed_request = self.navigation.compute_request(
                 self.state, self.mission_control.waypoint
