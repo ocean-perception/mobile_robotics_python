@@ -38,6 +38,8 @@ sensors:
   external_positioning:
     name: aruco_marker
     driver: aruco_udp
+    parameters:
+      port: 50000
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
