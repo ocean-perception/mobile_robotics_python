@@ -1,7 +1,7 @@
-from mobile_robotics_python.messages import SpeedRequestMessage, RobotStateMessage
-from mobile_robotics_python.tools.time import get_utc_stamp
-
 import numpy as np
+
+from mobile_robotics_python.messages import RobotStateMessage, SpeedRequestMessage
+from mobile_robotics_python.tools.time import get_utc_stamp
 
 
 class NaiveRotateMove:
@@ -18,8 +18,9 @@ class NaiveRotateMove:
 
         diff_x = desired_position.x - current_position.x
         diff_y = desired_position.y - current_position.y
-        diff_theta = desired_position.theta - current_position.theta
-        distance = (diff_x ** 2 + diff_y ** 2) ** 0.5
+        desired_theta = np.arctan2(diff_y, diff_x)
+        diff_theta = desired_theta - current_position.theta
+        distance = (diff_x**2 + diff_y**2) ** 0.5
 
         msg = SpeedRequestMessage()
         msg.stamp_s = get_utc_stamp()
@@ -28,6 +29,5 @@ class NaiveRotateMove:
             return msg
 
         if distance > self.position_threshold:
-            msg.vx_mps = self.linear_speed * np.sign(diff_x)
-            msg.vy_mps = self.linear_speed * np.sign(diff_y)
+            msg.vx_mps = self.linear_speed * np.sign(diff_x) * np.sign(diff_y)
             return msg
