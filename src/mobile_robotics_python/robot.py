@@ -7,6 +7,8 @@ from .localisation import Localisation
 from .navigation import Navigation
 from .mission_control import MissionControl
 
+from pathlib import Path
+
 
 class Robot:
     def __init__(self, config: Configuration):
@@ -36,7 +38,9 @@ class Robot:
         # Create controllers
         self.localisation = Localisation(config.control.localisation)
         self.navigation = Navigation(config.control.navigation)
-        self.mission_control = MissionControl(config.control.mission)
+        self.mission_control = MissionControl(
+            config.control.mission, Path(config.filename).parent / "missions"
+        )
 
         # Create motors
         self.motors = Motors(config.motors)
@@ -54,11 +58,11 @@ class Robot:
                 measurements.append(msg)
 
             # Update navigation
-            for measurement in sorted(self.measurements, key=lambda m: m.stamp_s):
+            for measurement in sorted(measurements, key=lambda m: m.stamp_s):
                 self.state = self.localisation.update(measurement)
 
             speed_request = self.navigation.compute_request(
-                self.state, self.mission_control.current_waypoint
+                self.state, self.mission_control.waypoint
             )
 
             self.motors.move(speed_request)

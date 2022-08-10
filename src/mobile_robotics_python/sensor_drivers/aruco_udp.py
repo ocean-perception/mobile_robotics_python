@@ -1,6 +1,6 @@
 from mobile_robotics_python.messages import RobotStateMessage
 
-
+import threading
 import socket
 
 
@@ -18,7 +18,9 @@ class ArUcoUDP:
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         listeningAddress = ("", params["port"])
         self.client.bind(listeningAddress)
-        self.loop()
+
+        # th = threading.Thread(target=self.loop(), daemon=True)
+        # th.start()
 
     def loop(self):
         while True:

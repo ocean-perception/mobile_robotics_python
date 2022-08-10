@@ -38,6 +38,7 @@ class Configuration(BaseModel):
     sensors: SensorsConfiguration
     control: ControlConfiguration
     motors: EntryWithParams
+    filename: str = None
 
     def __init__(self, filename):
         if not Path(filename).exists():
@@ -45,6 +46,7 @@ class Configuration(BaseModel):
         f = Path(filename).open("r")
         data = yaml.safe_load(f)
         super().__init__(**data)
+        self.filename = filename
         print("Loaded valid configuration file")
 
     def print(self):

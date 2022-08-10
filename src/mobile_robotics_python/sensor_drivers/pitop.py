@@ -63,6 +63,9 @@ class PiTopEncoder:
         self.ready = True
 
     def read(self) -> RobotStateMessage:
+        if not self.ready:
+            print("    PiTopEncoder is not ready")
+            return RobotStateMessage()
         ts = get_utc_stamp()
         ld = self._left_encoder.distance
         rd = self._right_encoder.distance
