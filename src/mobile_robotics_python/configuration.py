@@ -1,8 +1,11 @@
-import yaml
-from pathlib import Path
-from pydantic import BaseModel
-from typing import Optional, List
 import pprint
+from pathlib import Path
+from typing import List, Optional
+
+import yaml
+from pydantic import BaseModel
+
+from mobile_robotics_python import Console
 
 
 class PoseDict(BaseModel):
@@ -48,7 +51,7 @@ class Configuration(BaseModel):
         data = yaml.safe_load(f)
         super().__init__(**data)
         self.filename = filename
-        print("Loaded valid configuration file")
+        Console.info("Loaded valid configuration file")
 
     def print(self):
         pp = pprint.PrettyPrinter(indent=2)

@@ -2,6 +2,7 @@ import numpy as np
 from pitop import EncoderMotor, ForwardDirection
 from pitop.pma.imu import IMU
 
+from mobile_robotics_python import Console
 from mobile_robotics_python.messages import RobotStateMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
 
@@ -13,10 +14,11 @@ class PiTopCompass:
             self._imu = IMU()
             self.ready = True
         except Exception as e:
-            print("    PiTopCompass could not be initialised. Error:", e)
+            Console.warn("    PiTopCompass could not be initialised. Error:", e)
 
     def read(self) -> RobotStateMessage:
         if not self.ready:
+            Console.warn("    PiTopCompass is not ready")
             return RobotStateMessage()
         acc = self._imu.accelerometer
         gyro = self._imu.gyroscope
@@ -43,7 +45,7 @@ def create_encoder(params):
             motor.forward_direction = ForwardDirection.COUNTER_CLOCKWISE
         return motor
     except Exception as e:
-        print("    EncoderMotor could not be initialised. Error:", e)
+        Console.warn("    EncoderMotor could not be initialised. Error:", e)
         return None
 
 
@@ -63,7 +65,7 @@ class PiTopEncoder:
 
     def read(self) -> RobotStateMessage:
         if not self.ready:
-            print("    PiTopEncoder is not ready")
+            Console.warn("    PiTopEncoder is not ready")
             return RobotStateMessage()
         ts = get_utc_stamp()
         ld = self._left_encoder.distance

@@ -1,7 +1,8 @@
-from mobile_robotics_python.messages import RobotStateMessage
-
-import threading
 import socket
+from threading import Thread
+
+from mobile_robotics_python import Rate
+from mobile_robotics_python.messages import RobotStateMessage
 
 
 class ArUcoUDP:
@@ -16,16 +17,24 @@ class ArUcoUDP:
 
         # -- Enable broadcasting mode
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        listeningAddress = ("", params["port"])
-        self.client.bind(listeningAddress)
-
-        # th = threading.Thread(target=self.loop(), daemon=True)
-        # th.start()
+        self.client.settimeout(params["timeout"])
+        self.client.bind(("", params["port"]))
+        self.th = Thread(target=self.loop, daemon=True)
+        self.th.start()
 
     def loop(self):
+        r = Rate(10)
         while True:
-            self.data, _ = self.client.recvfrom(1024)
+            try:
+                self.data, _ = self.client.recvfrom(1024)
+            except Exception as e:
+                print("Got exception trying to recv %s" % e)
+                raise StopIteration
+            r.sleep()
 
     def read(self) -> RobotStateMessage:
         # TODO convert self.data to RobotStateMessage
         pass
+
+    def __del__(self):
+        self.client.close()

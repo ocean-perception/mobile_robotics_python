@@ -14,7 +14,7 @@ def sleep(duration):
         time.sleep(duration)
 
 
-class Rate(object):
+class Rate:
     """
     Convenience class for sleeping in a loop at a specified rate
     """

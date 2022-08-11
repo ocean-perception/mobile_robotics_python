@@ -41,6 +41,7 @@ sensors:
     driver: aruco_udp
     parameters:
       port: 50000
+      timeout: 15
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]

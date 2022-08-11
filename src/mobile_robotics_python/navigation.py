@@ -1,5 +1,7 @@
+from mobile_robotics_python import Console
+
+from .messages import RobotStateMessage, SpeedRequestMessage
 from .navigation_solutions.naive_rotate_move import NaiveRotateMove
-from .messages import SpeedRequestMessage, RobotStateMessage
 
 
 class Navigation:
@@ -10,7 +12,7 @@ class Navigation:
         if self.driver == "naive_rotate_move":
             self._impl = NaiveRotateMove(self.parameters)
         else:
-            print(f"Unknown localisation solution {self.driver}")
+            Console.error(f"Unknown localisation solution {self.driver}")
 
     def compute_request(
         self, current_position: RobotStateMessage, desired_position: RobotStateMessage

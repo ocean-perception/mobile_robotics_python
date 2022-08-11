@@ -1,6 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 
+from .console import Console
+
 
 class Logger:
     def __init__(self, name: str, logging_folder: str):
@@ -11,7 +13,7 @@ class Logger:
             logging_folder_path.mkdir(parents=True, exist_ok=True)
         self.filename = logging_folder_path / filename
         self.file = self.filename.open("w")
-        print("[Logger]: Creating logging file at", self.filename)
+        Console.info_verbose("[Logger]: Creating logging file at", self.filename)
 
     @staticmethod
     def stamp():

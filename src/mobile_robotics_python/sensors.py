@@ -1,11 +1,9 @@
-from email import message
-from .tools.pose import Pose
-from .tools.csv_logging import Logger
 from .configuration import SensorConfiguration
-from .sensor_drivers.rplidar import RPLidar
-from .sensor_drivers.pitop import PiTopCompass, PiTopEncoder
-from .sensor_drivers.aruco_udp import ArUcoUDP
 from .messages import LaserScanMessage, RobotStateMessage, SpeedRequestMessage
+from .sensor_drivers.aruco_udp import ArUcoUDP
+from .sensor_drivers.pitop import PiTopCompass, PiTopEncoder
+from .sensor_drivers.rplidar import RPLidar
+from .tools import Console, Logger, Pose
 
 
 class BaseLoggable:
@@ -142,7 +140,7 @@ class BaseSensor(BaseLoggable):
         self.pose = Pose(config.name)
         self.pose.set_xyz(config.pose.xyz)
         self.pose.set_rpy(config.pose.rpy)
-        print("  * Adding sensor:", self.name)
+        Console.info("  * Adding sensor:", self.name)
 
 
 class Lidar(BaseSensor):
@@ -151,7 +149,7 @@ class Lidar(BaseSensor):
         if self.driver == "rplidar":
             self._impl = RPLidar(self.parameters)
         else:
-            print(f"Unknown lidar driver {self.driver}")
+            Console.error(f"Unknown lidar driver {self.driver}")
 
     def read(self) -> LaserScanMessage:
         msg = self._impl.read()
@@ -165,7 +163,7 @@ class Compass(BaseSensor):
         if self.driver == "pitop_compass":
             self._impl = PiTopCompass(self.parameters)
         else:
-            print(f"Unknown compass driver {self.driver}")
+            Console.error(f"Unknown compass driver {self.driver}")
 
     def read(self) -> RobotStateMessage:
         msg = self._impl.read()
@@ -179,7 +177,7 @@ class Encoder(BaseSensor):
         if self.driver == "pitop_encoder":
             self._impl = PiTopEncoder(self.parameters)
         else:
-            print(f"Unknown encoder driver {self.driver}")
+            Console.error(f"Unknown encoder driver {self.driver}")
 
     def read(self) -> RobotStateMessage:
         msg = self._impl.read()
@@ -193,7 +191,7 @@ class ExternalPositioning(BaseSensor):
         if self.driver == "aruco_udp":
             self._impl = ArUcoUDP(self.parameters)
         else:
-            print(f"Unknown compass driver {self.driver}")
+            Console.error(f"Unknown compass driver {self.driver}")
 
     def read(self) -> RobotStateMessage:
         msg = self._impl.read()

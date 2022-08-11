@@ -2,6 +2,8 @@ from pathlib import Path
 
 from pytransform3d.transform_manager import TransformManager
 
+from mobile_robotics_python import Console
+
 from .configuration import Configuration
 from .localisation import Localisation
 from .mission_control import MissionControl
@@ -16,7 +18,7 @@ class Robot:
         self._tm = TransformManager()
         self._config = config
 
-        print("Initializing robot", config.robot_name, "...")
+        Console.info("Initializing robot", config.robot_name, "...")
 
         # Create empty sensors
         self.lidar = None
