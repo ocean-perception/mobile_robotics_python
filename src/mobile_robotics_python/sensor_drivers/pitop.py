@@ -1,5 +1,5 @@
 import numpy as np
-from pitop import EncoderMotor, ForwardDirection
+from pitop import EncoderMotor, ForwardDirection, Pitop
 from pitop.pma.imu import IMU
 
 from mobile_robotics_python import Console
@@ -92,3 +92,40 @@ class PiTopEncoder:
         msg.vx_mps = linear_velocity
         msg.wz_radps = angular_velocity
         return msg
+
+
+class PiTopBattery:
+    def __init__(self, params):
+        self.ready = False
+        try:
+            self._battery = Pitop().battery
+            self.ready = True
+        except Exception as e:
+            Console.warn("    PiTopBattery could not be initialised. Error:", e)
+
+    def read(self):
+        print(f"Battery capacity: {self._battery.capacity}")
+        print(f"Battery time remaining: {self._battery.time_remaining}")
+        print(f"Battery is charging: {self._battery.is_charging}")
+        print(f"Battery is full: {self._battery.is_full}")
+        print(f"Battery wattage: {self._battery.wattage}")
+
+
+class PiTopScreen:
+    def __init__(self, params):
+        self.ready = False
+        try:
+            self._device = Pitop()
+            self._display = self._device.miniscreen
+            self.ready = True
+        except Exception as e:
+            Console.warn("    PiTopScreen could not be initialised. Error:", e)
+
+    def read(self):
+        print(f"Display brightness: {self._display.brightness}")
+        print(f"Display blanking timeout: {self._display.blanking_timeout}")
+        print(f"Display backlight is on: {self._display.backlight}")
+        print(f"Display lid is open: {self._display.lid_is_open}")
+
+    def print(self, msg):
+        self._display.display_multiline_text(msg, font_size=20)

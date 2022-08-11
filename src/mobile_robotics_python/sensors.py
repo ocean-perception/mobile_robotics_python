@@ -1,7 +1,7 @@
 from .configuration import SensorConfiguration
 from .messages import LaserScanMessage, RobotStateMessage, SpeedRequestMessage
 from .sensor_drivers.aruco_udp import ArUcoUDP
-from .sensor_drivers.pitop import PiTopCompass, PiTopEncoder
+from .sensor_drivers.pitop import PiTopBattery, PiTopCompass, PiTopEncoder, PiTopScreen
 from .sensor_drivers.rplidar import RPLidar
 from .tools import Console, Logger, Pose
 
@@ -125,6 +125,7 @@ class BaseSensor(BaseLoggable):
         config: SensorConfiguration,
         logging_folder: str,
         message_type="RobotStateMessage",
+        has_pose=True,
     ):
         """Abstract class that defines the interface for all sensors.
 
@@ -137,9 +138,11 @@ class BaseSensor(BaseLoggable):
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters
-        self.pose = Pose(config.name)
-        self.pose.set_xyz(config.pose.xyz)
-        self.pose.set_rpy(config.pose.rpy)
+        self.pose = None
+        if has_pose:
+            self.pose = Pose(config.name)
+            self.pose.set_xyz(config.pose.xyz)
+            self.pose.set_rpy(config.pose.rpy)
         Console.info("  * Adding sensor:", self.name)
 
 
@@ -197,3 +200,34 @@ class ExternalPositioning(BaseSensor):
         msg = self._impl.read()
         self.log(msg)
         return msg
+
+
+class Battery(BaseSensor):
+    def __init__(self, config: SensorConfiguration, logging_folder: str):
+        super().__init__(config, logging_folder, has_pose=False)
+        if self.driver == "pitop_battery":
+            self._impl = PiTopBattery(self.parameters)
+        else:
+            Console.error(f"Unknown compass driver {self.driver}")
+
+    def read(self) -> RobotStateMessage:
+        msg = self._impl.read()
+        self.log(msg)
+        return msg
+
+
+class Screen(BaseSensor):
+    def __init__(self, config: SensorConfiguration, logging_folder: str):
+        super().__init__(config, logging_folder, has_pose=False)
+        if self.driver == "pitop_screen":
+            self._impl = PiTopScreen(self.parameters)
+        else:
+            Console.error(f"Unknown compass driver {self.driver}")
+
+    def read(self) -> RobotStateMessage:
+        msg = self._impl.read()
+        self.log(msg)
+        return msg
+
+    def print(self, mgs: str):
+        self._impl.print(mgs)
