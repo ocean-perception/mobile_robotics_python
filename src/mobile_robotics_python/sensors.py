@@ -64,6 +64,8 @@ class BaseLoggable:
             )
 
     def log(self, msg):
+        if msg is None:
+            return
         if self._message_type == "RobotStateMessage":
             self.log_state(msg)
         elif self._message_type == "LaserScanMessage":
