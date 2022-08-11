@@ -1,7 +1,6 @@
-from mobile_robotics_python.messages import RobotStateMessage
-
-import threading
 import socket
+
+from mobile_robotics_python.messages import RobotStateMessage
 
 
 class ArUcoUDP:
