@@ -59,7 +59,7 @@ class Robot:
     def run(self):
         Console.info("Running robot...")
 
-        r = Rate(10.0)
+        r = Rate(5.0)
 
         while not self.mission_control.finished:
             # Read sensors
@@ -68,8 +68,11 @@ class Robot:
                 msg = self.compass.read()
                 measurements.append(msg)
             if self.encoder is not None:
+                self.encoder.yaw_rad = self.compass.yaw_rad
                 msg = self.encoder.read()
                 measurements.append(msg)
+            if self.lidar is not None:
+                msg = self.lidar.read()
 
             # Update navigation
             for measurement in sorted(measurements, key=lambda m: m.stamp_s):
@@ -77,13 +80,10 @@ class Robot:
 
             # print("State", self.state)
             # print("current waypoint", self.mission_control.waypoint)
-            print(self.mission_control.current_waypoint, self.state)
-
             self.mission_control.update(self.state)
             speed_request = self.navigation.compute_request(
                 self.state, self.mission_control.waypoint
             )
-            print("speed_request", speed_request)
             self.motors.move(speed_request)
 
             r.sleep()

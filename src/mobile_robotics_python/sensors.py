@@ -54,16 +54,18 @@ class BaseLoggable:
                     "stamp_s",
                     "angle_min_rad",
                     "angle_max_rad",
-                    "angle_increment_rad",
                     "time_increment_s",
                     "range_min_m",
                     "range_max_m",
                     "ranges",
                     "intensities",
+                    "angles",
                 ]
             )
 
     def log(self, msg):
+        if msg is None:
+            return
         if self._message_type == "RobotStateMessage":
             self.log_state(msg)
         elif self._message_type == "LaserScanMessage":
@@ -98,12 +100,12 @@ class BaseLoggable:
             msg.stamp_s,
             msg.angle_min_rad,
             msg.angle_max_rad,
-            msg.angle_increment_rad,
             msg.time_increment_s,
             msg.range_min_m,
             msg.range_max_m,
             str(msg.ranges),
             str(msg.intensities),
+            str(msg.angles),
         )
 
     def log_velocity_request(self, msg: SpeedRequestMessage):
@@ -167,10 +169,12 @@ class Compass(BaseSensor):
             self._impl = PiTopCompass(self.parameters)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
+        self.yaw_rad = 0.0
 
     def read(self) -> RobotStateMessage:
         msg = self._impl.read()
         self.log(msg)
+        self.yaw_rad = msg.yaw_rad
         return msg
 
 
@@ -181,8 +185,10 @@ class Encoder(BaseSensor):
             self._impl = PiTopEncoder(self.parameters)
         else:
             Console.error(f"Unknown encoder driver {self.driver}")
+        self.yaw_rad = 0.0
 
     def read(self) -> RobotStateMessage:
+        self._impl.yaw_rad = self.yaw_rad
         msg = self._impl.read()
         self.log(msg)
         return msg

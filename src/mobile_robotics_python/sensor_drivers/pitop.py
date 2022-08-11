@@ -61,6 +61,7 @@ class PiTopEncoder:
         self.previous_stamp = get_utc_stamp()
         self.previous_left = self._left_encoder.distance
         self.previous_right = self._right_encoder.distance
+        self.yaw_rad = 0.0
         self.ready = True
 
     def read(self) -> RobotStateMessage:
@@ -88,8 +89,9 @@ class PiTopEncoder:
         self.previous_right = rd
 
         msg = RobotStateMessage()
-        msg.stamp_s = ts
-        msg.vx_mps = linear_velocity
+        msg.stamp_s = (ts + self.previous_stamp) / 2
+        msg.vx_mps = linear_velocity * np.cos(self.yaw_rad)
+        msg.vy_mps = linear_velocity * np.sin(self.yaw_rad)
         msg.wz_radps = angular_velocity
         return msg
 

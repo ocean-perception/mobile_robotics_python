@@ -28,18 +28,26 @@ class DeadReckoning:
         self.state.x_m = (
             self.state.x_m
             + self.state.vx_mps * dt_s
-            + 0.5 * self.state.ax_mpss * dt_s**2
+            #    + 0.5 * self.state.ax_mpss * dt_s**2
         )
         self.state.y_m = (
             self.state.y_m
             + self.state.vy_mps * dt_s
-            + 0.5 * self.state.ay_mpss * dt_s**2
+            #    + 0.5 * self.state.ay_mpss * dt_s**2
         )
+
+        self.state.stamp_s = stamp_s
 
         return self.state
 
     def update(self, msg: RobotStateMessage) -> RobotStateMessage:
         # TODO make this update generic for all fields
+        if msg.x_m is not None:
+            self.state.x_m = msg.x_m
+        if msg.y_m is not None:
+            self.state.y_m = msg.y_m
+        if msg.z_m is not None:
+            self.state.z_m = msg.z_m
         if msg.roll_rad is not None:
             self.state.roll_rad = msg.roll_rad
         if msg.pitch_rad is not None:
@@ -50,6 +58,18 @@ class DeadReckoning:
             self.state.vx_mps = msg.vx_mps
         if msg.vy_mps is not None:
             self.state.vy_mps = msg.vy_mps
+        if msg.vz_mps is not None:
+            self.state.vz_mps = msg.vz_mps
+        if msg.wx_radps is not None:
+            self.state.wx_radps = msg.wx_radps
+        if msg.wy_radps is not None:
+            self.state.wy_radps = msg.wy_radps
         if msg.wz_radps is not None:
             self.state.wz_radps = msg.wz_radps
+        if msg.ax_mpss is not None:
+            self.state.ax_mpss = msg.ax_mpss
+        if msg.ay_mpss is not None:
+            self.state.ay_mpss = msg.ay_mpss
+        if msg.az_mpss is not None:
+            self.state.az_mpss = msg.az_mpss
         return self.predict(msg.stamp_s)

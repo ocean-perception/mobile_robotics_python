@@ -8,6 +8,10 @@ sensors:
     parameters:
       port: /dev/ttyUSB0
       baudrate: 115200
+      range_min_m: 0.2
+      range_max_m: 2.0
+      angle_min_rad: -1.57
+      angle_max_rad: 1.57
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
@@ -25,11 +29,11 @@ sensors:
     parameters:
       wheel_separation: 0.163
       left:
-        port: M3
+        port: M0
         invert: false
         wheel_diameter: 0.072
       right:
-        port: M0
+        port: M3
         invert: true
         wheel_diameter: 0.072
     pose:
@@ -42,6 +46,7 @@ sensors:
     parameters:
       port: 50000
       timeout: 15
+      marker_id: 1
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
@@ -67,8 +72,8 @@ control:
     name: navigation
     driver: naive_rotate_move
     parameters:
-      linear_speed: 0.3 # m/s
-      rotation_speed: 0.5 # rad/s
+      linear_speed: 0.05 # m/s
+      rotation_speed: 0.7 # rad/s
       orientation_threshold: 0.1  # radians
 
 
@@ -78,10 +83,10 @@ motors:
   parameters:
     wheel_separation: 0.163
     left:
-      port: M3
+      port: M0
       invert: false
       wheel_diameter: 0.072
     right:
-      port: M0
+      port: M3
       invert: true
       wheel_diameter: 0.072
