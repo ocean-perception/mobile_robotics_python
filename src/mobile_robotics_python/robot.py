@@ -2,19 +2,20 @@ from pathlib import Path
 
 from pytransform3d.transform_manager import TransformManager
 
-from mobile_robotics_python import Console
-
 from .configuration import Configuration
 from .localisation import Localisation
 from .mission_control import MissionControl
 from .motors import Motors
 from .navigation import Navigation
 from .sensors import Compass, Encoder, ExternalPositioning, Lidar
+from .tools import Console
 from .tools.rate import Rate
 
 
 class Robot:
     def __init__(self, config: Configuration):
+        Console.set_logging_file(config.logging_folder)
+
         self._tm = TransformManager()
         self._config = config
 
@@ -53,7 +54,7 @@ class Robot:
         self.motors = Motors(config.motors, config.logging_folder)
 
     def run(self):
-        print("Running robot...")
+        Console.info("Running robot...")
 
         r = Rate(10.0)
 

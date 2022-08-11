@@ -32,4 +32,4 @@ class Logger:
     def __del__(self):
         # Make sure logging data is written to disk
         # if we decide to stop execution
-        print("\n[Logger]: Closing logging file at", self.filename)
+        Console.info_verbose("\n[Logger]: Closing logging file at", self.filename)
