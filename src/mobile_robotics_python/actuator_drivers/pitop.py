@@ -27,4 +27,3 @@ class PiTopMotors:
     def __del__(self):
         if self.ready:
             self._ctrl.stop()
-            self._ctrl.close()

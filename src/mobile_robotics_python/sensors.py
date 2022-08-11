@@ -183,8 +183,10 @@ class Encoder(BaseSensor):
             self._impl = PiTopEncoder(self.parameters)
         else:
             Console.error(f"Unknown encoder driver {self.driver}")
+        self.yaw_rad = 0.0
 
     def read(self) -> RobotStateMessage:
+        self._impl.yaw_rad = self.yaw_rad
         msg = self._impl.read()
         self.log(msg)
         return msg

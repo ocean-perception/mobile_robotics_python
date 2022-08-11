@@ -55,7 +55,7 @@ class Robot:
     def run(self):
         Console.info("Running robot...")
 
-        r = Rate(10.0)
+        r = Rate(5.0)
 
         while not self.mission_control.finished:
             # Read sensors

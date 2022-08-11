@@ -78,6 +78,8 @@ class PiTopEncoder:
 
         left_wheel_speed = l_diff / ts_diff
         right_wheel_speed = r_diff / ts_diff
+        print("wheel speeds:", left_wheel_speed, right_wheel_speed)
+        print("wheel diff:", l_diff, r_diff)
         linear_velocity = (right_wheel_speed + left_wheel_speed) / 2.0
         angular_velocity = (
             right_wheel_speed - left_wheel_speed
@@ -89,8 +91,9 @@ class PiTopEncoder:
         self.previous_right = rd
 
         msg = RobotStateMessage()
-        msg.stamp_s = ts
+        msg.stamp_s = (ts + self.previous_stamp) / 2
         msg.vx_mps = linear_velocity * np.cos(self.yaw_rad)
         msg.vy_mps = linear_velocity * np.sin(self.yaw_rad)
         msg.wz_radps = angular_velocity
+        print("VEL", msg.vx_mps, msg.vy_mps, msg.wz_radps, self.yaw_rad)
         return msg
