@@ -19,7 +19,7 @@ class ArUcoUDP:
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.client.settimeout(params["timeout"])
         self.client.bind(("", params["port"]))
-        self.aruco_id = params['aruco_id']
+        self.marker_id = params['marker_id']
         self.th = Thread(target=self.loop, daemon=True)
         self.th.start()
 
@@ -32,7 +32,7 @@ class ArUcoUDP:
             try :
                 broadcast_data, _ = self.client.recvfrom(1024)
                 result = json.loads(broadcast_data)
-                self.data = result.get(str(self.aruco_id), None)
+                self.data = result.get(str(self.marker_id), None)
 
             except Exception as e:
                 print("Got exception trying to recv %s" % e)
