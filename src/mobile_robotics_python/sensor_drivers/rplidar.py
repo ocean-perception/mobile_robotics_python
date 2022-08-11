@@ -4,6 +4,7 @@ from threading import Thread
 
 import serial
 
+from mobile_robotics_python import Rate
 from mobile_robotics_python.messages import LaserScanMessage
 
 """
@@ -442,13 +443,16 @@ class RPLidar:
         standard_dt_us, express_dt_us = self._lidar.get_sample_period()
         print("KKKKKKKKKKK Standard sample period: {}us".format(standard_dt_us))
         self._lidar.dev.dtr = False
-
         self.th = Thread(target=self.loop, daemon=True)
+        self.th.start()
 
     def loop(self):
+        print("Running laser thread...")
+        r = Rate(1.0)
         while True:
             try:
                 polled_samples = self._lidar.poll_scan_samples()
+                print("Polled {} samples".format(len(polled_samples)))
                 if len(polled_samples) == 0:
                     continue
                 for angle, dist, new_scan in polled_samples:
@@ -456,6 +460,10 @@ class RPLidar:
             except Exception as e:
                 print(e)
                 pass
+            r.sleep()
 
     def read(self) -> LaserScanMessage:
         pass
+
+    def __del__(self):
+        self._lidar.stop_scan()

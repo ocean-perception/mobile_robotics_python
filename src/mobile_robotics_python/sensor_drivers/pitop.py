@@ -2,6 +2,7 @@ import numpy as np
 from pitop import EncoderMotor, ForwardDirection
 from pitop.pma.imu import IMU
 
+from mobile_robotics_python import Console
 from mobile_robotics_python.messages import RobotStateMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
 
@@ -9,14 +10,16 @@ from mobile_robotics_python.tools.time import get_utc_stamp
 class PiTopCompass:
     def __init__(self, params):
         self.ready = False
+        self.yaw_rad = 0.0
         try:
             self._imu = IMU()
             self.ready = True
         except Exception as e:
-            print("    PiTopCompass could not be initialised. Error:", e)
+            Console.warn("    PiTopCompass could not be initialised. Error:", e)
 
     def read(self) -> RobotStateMessage:
         if not self.ready:
+            Console.warn("    PiTopCompass is not ready")
             return RobotStateMessage()
         acc = self._imu.accelerometer
         gyro = self._imu.gyroscope
@@ -32,6 +35,7 @@ class PiTopCompass:
         msg.ax_mpss = acc.x / 9.81
         msg.ay_mpss = acc.y / 9.81
         msg.az_mpss = acc.z / 9.81
+        self.yaw_rad = msg.yaw_rad
         return msg
 
 
@@ -43,7 +47,7 @@ def create_encoder(params):
             motor.forward_direction = ForwardDirection.COUNTER_CLOCKWISE
         return motor
     except Exception as e:
-        print("    EncoderMotor could not be initialised. Error:", e)
+        Console.warn("    EncoderMotor could not be initialised. Error:", e)
         return None
 
 
@@ -59,11 +63,12 @@ class PiTopEncoder:
         self.previous_stamp = get_utc_stamp()
         self.previous_left = self._left_encoder.distance
         self.previous_right = self._right_encoder.distance
+        self.yaw_rad = 0.0
         self.ready = True
 
     def read(self) -> RobotStateMessage:
         if not self.ready:
-            print("    PiTopEncoder is not ready")
+            Console.warn("    PiTopEncoder is not ready")
             return RobotStateMessage()
         ts = get_utc_stamp()
         ld = self._left_encoder.distance
@@ -87,6 +92,7 @@ class PiTopEncoder:
 
         msg = RobotStateMessage()
         msg.stamp_s = ts
-        msg.vx_mps = linear_velocity
+        msg.vx_mps = linear_velocity * np.cos(self.yaw_rad)
+        msg.vy_mps = linear_velocity * np.sin(self.yaw_rad)
         msg.wz_radps = angular_velocity
         return msg

@@ -8,7 +8,6 @@ class NaiveRotateMove:
     def __init__(self, parameters):
         self.parameters = parameters
         self.orientation_threshold = parameters["orientation_threshold"]
-        self.position_threshold = parameters["position_threshold"]
         self.rotation_speed = parameters["rotation_speed"]
         self.linear_speed = parameters["linear_speed"]
 
@@ -31,7 +30,7 @@ class NaiveRotateMove:
             msg.wz_radps = self.rotation_speed * np.sign(diff_theta)
             return msg
 
-        if distance > self.position_threshold:
+        if distance > 0:
             msg.vx_mps = self.linear_speed * np.sign(diff_x) * np.sign(diff_y)
             return msg
         return msg

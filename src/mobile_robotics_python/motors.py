@@ -1,10 +1,14 @@
-from .configuration import EntryWithParams
+from mobile_robotics_python import Console
+
 from .actuator_drivers.pitop import PiTopMotors
+from .configuration import EntryWithParams
 from .messages import SpeedRequestMessage
+from .sensors import BaseLoggable
 
 
-class Motors:
-    def __init__(self, config: EntryWithParams):
+class Motors(BaseLoggable):
+    def __init__(self, config: EntryWithParams, logging_folder: str):
+        super().__init__(config, logging_folder, message_type="SpeedRequestMessage")
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters
@@ -12,6 +16,9 @@ class Motors:
             self._impl = PiTopMotors(self.parameters)
         else:
             print(f"Unknown motor driver {self.driver}")
+        Console.info("  * Adding motors:", self.name)
 
     def move(self, msg: SpeedRequestMessage):
-        return self._impl.move(msg)
+        msg = self._impl.move(msg)
+        self.log(msg)
+        return msg
