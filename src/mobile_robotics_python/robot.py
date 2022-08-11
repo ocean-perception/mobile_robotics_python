@@ -47,7 +47,6 @@ class Robot:
         self.mission_control = MissionControl(
             config.control.mission,
             Path(config.filename).parent / "missions",
-            waypoint_threshold=0.1,
         )
 
         # Create motors

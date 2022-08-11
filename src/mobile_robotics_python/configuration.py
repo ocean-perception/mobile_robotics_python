@@ -30,8 +30,13 @@ class SensorsConfiguration(BaseModel):
     external_positioning: Optional[SensorConfiguration] = None
 
 
+class MissionConfiguration(BaseModel):
+    name: str
+    parameters: Optional[dict] = None
+
+
 class ControlConfiguration(BaseModel):
-    mission: str
+    mission: MissionConfiguration
     localisation: EntryWithParams
     navigation: EntryWithParams
 
