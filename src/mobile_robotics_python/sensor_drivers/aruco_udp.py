@@ -1,9 +1,10 @@
+import json
 import socket
 from threading import Thread
 
 from mobile_robotics_python import Rate
 from mobile_robotics_python.messages import RobotStateMessage
-import json
+
 
 class ArUcoUDP:
     def __init__(self, params):
@@ -19,17 +20,17 @@ class ArUcoUDP:
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.client.settimeout(params["timeout"])
         self.client.bind(("", params["port"]))
-        self.marker_id = params['marker_id']
+        self.marker_id = params["marker_id"]
         self.th = Thread(target=self.loop, daemon=True)
         self.th.start()
 
         # -- data recieved
-        self.data = [None]*8
+        self.data = [None] * 8
 
     def loop(self):
         r = Rate(10)
         while True:
-            try :
+            try:
                 broadcast_data, _ = self.client.recvfrom(1024)
                 result = json.loads(broadcast_data)
                 self.data = result.get(str(self.marker_id), None)

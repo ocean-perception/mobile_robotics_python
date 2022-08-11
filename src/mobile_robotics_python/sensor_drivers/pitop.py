@@ -10,6 +10,7 @@ from mobile_robotics_python.tools.time import get_utc_stamp
 class PiTopCompass:
     def __init__(self, params):
         self.ready = False
+        self.yaw_rad = 0.0
         try:
             self._imu = IMU()
             self.ready = True
@@ -34,6 +35,7 @@ class PiTopCompass:
         msg.ax_mpss = acc.x / 9.81
         msg.ay_mpss = acc.y / 9.81
         msg.az_mpss = acc.z / 9.81
+        self.yaw_rad = msg.yaw_rad
         return msg
 
 
@@ -61,6 +63,7 @@ class PiTopEncoder:
         self.previous_stamp = get_utc_stamp()
         self.previous_left = self._left_encoder.distance
         self.previous_right = self._right_encoder.distance
+        self.yaw_rad = 0.0
         self.ready = True
 
     def read(self) -> RobotStateMessage:
@@ -89,6 +92,7 @@ class PiTopEncoder:
 
         msg = RobotStateMessage()
         msg.stamp_s = ts
-        msg.vx_mps = linear_velocity
+        msg.vx_mps = linear_velocity * np.cos(self.yaw_rad)
+        msg.vy_mps = linear_velocity * np.sin(self.yaw_rad)
         msg.wz_radps = angular_velocity
         return msg

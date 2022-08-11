@@ -52,17 +52,17 @@ class DeadReckoning:
             self.state.vy_mps = msg.vy_mps
         if msg.wz_radps is not None:
             self.state.wz_radps = msg.wz_radps
-        if msg.x_m is not None: 
+        if msg.x_m is not None:
             self.state.x_m = msg.x_m
-        if msg.y_m is not None: 
+        if msg.y_m is not None:
             self.state.y_m = msg.y_m
-        if msg.z_m is not None: 
+        if msg.z_m is not None:
             self.state.z_m = msg.z_m
-        if msg.vx_mps is not None: 
+        if msg.vx_mps is not None:
             self.state.vx_mps = msg.vx_mps
-        if msg.vy_mps is not None: 
+        if msg.vy_mps is not None:
             self.state.vy_mps = msg.vy_mps
-        if msg.vz_mps is not None: 
+        if msg.vz_mps is not None:
             self.state.vz_mps = msg.vz_mps
         if msg.ax_mpss is not None:
             self.state.ax_mpss = msg.ax_mpss

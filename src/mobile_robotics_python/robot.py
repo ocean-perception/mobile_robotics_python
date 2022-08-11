@@ -64,6 +64,7 @@ class Robot:
                 msg = self.compass.read()
                 measurements.append(msg)
             if self.encoder is not None:
+                self.encoder.yaw_rad = self.compass.yaw_rad
                 msg = self.encoder.read()
                 measurements.append(msg)
 
@@ -73,13 +74,10 @@ class Robot:
 
             # print("State", self.state)
             # print("current waypoint", self.mission_control.waypoint)
-            print(self.mission_control.current_waypoint, self.state)
-
             self.mission_control.update(self.state)
             speed_request = self.navigation.compute_request(
                 self.state, self.mission_control.waypoint
             )
-            print("speed_request", speed_request)
             self.motors.move(speed_request)
 
             r.sleep()
