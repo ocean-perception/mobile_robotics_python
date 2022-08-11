@@ -166,10 +166,13 @@ class Compass(BaseSensor):
             self._impl = PiTopCompass(self.parameters)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
+        self.yaw_rad = 0.0
 
     def read(self) -> RobotStateMessage:
         msg = self._impl.read()
         self.log(msg)
+
+        self.yaw_rad = msg.yaw_rad
         return msg
 
 

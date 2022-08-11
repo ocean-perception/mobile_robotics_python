@@ -444,12 +444,19 @@ class RPLidar:
         print("KKKKKKKKKKK Standard sample period: {}us".format(standard_dt_us))
         self._lidar.dev.dtr = False
         self.th = Thread(target=self.loop, daemon=True)
-        self.th.start()
+        # self.th.start()
 
     def loop(self):
         print("Running laser thread...")
         r = Rate(1.0)
         while True:
+            # diff = 1.0 / (float(datetime.timestamp(datetime.utcnow())) - curr_time)
+            # curr_time = float(datetime.timestamp(datetime.utcnow()))
+            # x = random.random() / 10.0
+            # print(diff, x)
+            # Random time-lenght long computation
+            # time.sleep(x)
+
             try:
                 polled_samples = self._lidar.poll_scan_samples()
                 print("Polled {} samples".format(len(polled_samples)))

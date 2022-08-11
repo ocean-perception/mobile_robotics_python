@@ -10,7 +10,6 @@ from mobile_robotics_python.tools.time import get_utc_stamp
 class PiTopCompass:
     def __init__(self, params):
         self.ready = False
-        self.yaw_rad = 0.0
         try:
             self._imu = IMU()
             self.ready = True
@@ -35,7 +34,6 @@ class PiTopCompass:
         msg.ax_mpss = acc.x / 9.81
         msg.ay_mpss = acc.y / 9.81
         msg.az_mpss = acc.z / 9.81
-        self.yaw_rad = msg.yaw_rad
         return msg
 
 
