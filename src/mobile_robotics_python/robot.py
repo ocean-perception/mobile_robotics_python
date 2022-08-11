@@ -67,6 +67,8 @@ class Robot:
                 self.encoder.yaw_rad = self.compass.yaw_rad
                 msg = self.encoder.read()
                 measurements.append(msg)
+            if self.lidar is not None:
+                msg = self.lidar.read()
 
             # Update navigation
             for measurement in sorted(measurements, key=lambda m: m.stamp_s):

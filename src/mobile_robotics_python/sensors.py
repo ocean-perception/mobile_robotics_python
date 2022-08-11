@@ -54,12 +54,12 @@ class BaseLoggable:
                     "stamp_s",
                     "angle_min_rad",
                     "angle_max_rad",
-                    "angle_increment_rad",
                     "time_increment_s",
                     "range_min_m",
                     "range_max_m",
                     "ranges",
                     "intensities",
+                    "angles",
                 ]
             )
 
@@ -100,12 +100,12 @@ class BaseLoggable:
             msg.stamp_s,
             msg.angle_min_rad,
             msg.angle_max_rad,
-            msg.angle_increment_rad,
             msg.time_increment_s,
             msg.range_min_m,
             msg.range_max_m,
             str(msg.ranges),
             str(msg.intensities),
+            str(msg.angles),
         )
 
     def log_velocity_request(self, msg: SpeedRequestMessage):
@@ -171,7 +171,6 @@ class Compass(BaseSensor):
     def read(self) -> RobotStateMessage:
         msg = self._impl.read()
         self.log(msg)
-
         self.yaw_rad = msg.yaw_rad
         return msg
 

@@ -2,10 +2,12 @@ import math
 import time
 from threading import Thread
 
+import numpy as np
 import serial
 
 from mobile_robotics_python import Rate
 from mobile_robotics_python.messages import LaserScanMessage
+from mobile_robotics_python.tools.time import get_utc_stamp
 
 """
 RPLIDAR driver from
@@ -125,12 +127,14 @@ class RPLidarImpl:
         response_length = t & ~(3 << 30)
         send_mode = (t & (3 << 30)) >> 30
 
+        """
         print("Got response descriptor...")
         print(
             "Len: {}, Mode: {}, Data Type: {:x}".format(
                 response_length, send_mode, data_type
             )
         )
+        """
 
         return response_length, send_mode, data_type
 
@@ -171,9 +175,10 @@ class RPLidarImpl:
         """
         Read all available scan samples from the RPLIDAR.
         Returns:
-            A (possibly empty) list of (angle, distance, scan_start) tuples:
+            A (possibly empty) list of (angle, distance, quality, scan_start) tuples:
             - Angles are returned in units of degrees.
             - Distances are returned in units of millimeters.
+            - Qualities are returned as a single byte.
             - ``scan_start`` will be True if the sample and all successive
               samples belong to a new 360-degree scan.
         """
@@ -201,10 +206,9 @@ class RPLidarImpl:
             # Angles are returned as Q6 fixed-point numbers; divide everything
             # by 64.0 to account for this.
             angle_q6 = float(((packet[1] >> 1) & 0x7F) | (packet[2] << 7)) / 64.0
-
             distance_q2 = float(packet[3] | (packet[4] << 8)) / 4.0
-
-            samples.append((angle_q6, distance_q2, scan_start))
+            quality = int(packet[0] >> 2)
+            samples.append((angle_q6, distance_q2, quality, scan_start))
 
         return samples
 
@@ -438,39 +442,54 @@ class RPLidar:
         )
         self._lidar.acc_board_set_pwm(pwm_level=660)
         self._lidar.reset()
+        self.range_min_m = params["range_min_m"]
+        self.range_max_m = params["range_max_m"]
+        self.angle_min_rad = params["angle_min_rad"]
+        self.angle_max_rad = params["angle_max_rad"]
         time.sleep(1)
-        self._lidar.start_scan()
-        standard_dt_us, express_dt_us = self._lidar.get_sample_period()
-        print("KKKKKKKKKKK Standard sample period: {}us".format(standard_dt_us))
-        self._lidar.dev.dtr = False
+        self.standard_dt_us, self.express_dt_us = self._lidar.get_sample_period()
+
+        self.msg = LaserScanMessage()
+        self.msg.range_max_m = self.range_max_m
+        self.msg.range_min_m = self.range_min_m
+        self.msg.angle_max_rad = self.angle_max_rad
+        self.msg.angle_min_rad = self.angle_min_rad
+        self.msg.time_increment_s = self.standard_dt_us / 1e6
+
         self.th = Thread(target=self.loop, daemon=True)
-        # self.th.start()
+        self.th.start()
+
+    def process(self, polled_samples):
+        if len(polled_samples) == 0:
+            return
+        self.msg.stamp_s = get_utc_stamp()
+        self.msg.ranges = []
+        self.msg.intensities = []
+        self.msg.angles = []
+        for angle, dist, quality, new_scan in polled_samples:
+            range_m = float(dist) / 1000.0
+            angle_rad = np.radians(float(angle))
+            if range_m < self.range_min_m or range_m > self.range_max_m:
+                continue
+            if angle_rad < self.angle_min_rad or angle_rad > self.angle_max_rad:
+                continue
+            self.msg.ranges.append(range_m)
+            self.msg.intensities.append(quality)
+            self.msg.angles.append(angle_rad)
 
     def loop(self):
         print("Running laser thread...")
         r = Rate(1.0)
+        self._lidar.start_scan()
+        self._lidar.dev.dtr = False
         while True:
-            # diff = 1.0 / (float(datetime.timestamp(datetime.utcnow())) - curr_time)
-            # curr_time = float(datetime.timestamp(datetime.utcnow()))
-            # x = random.random() / 10.0
-            # print(diff, x)
-            # Random time-lenght long computation
-            # time.sleep(x)
-
-            try:
-                polled_samples = self._lidar.poll_scan_samples()
-                print("Polled {} samples".format(len(polled_samples)))
-                if len(polled_samples) == 0:
-                    continue
-                for angle, dist, new_scan in polled_samples:
-                    print(angle, dist, new_scan)
-            except Exception as e:
-                print(e)
-                pass
+            polled_samples = self._lidar.poll_scan_samples()
+            self.process(polled_samples)
             r.sleep()
 
     def read(self) -> LaserScanMessage:
-        pass
+        return self.msg
 
     def __del__(self):
         self._lidar.stop_scan()
+        self._lidar.dev.dtr = True

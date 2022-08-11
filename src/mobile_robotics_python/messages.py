@@ -1,5 +1,5 @@
-from typing import List
 from dataclasses import dataclass, field
+from typing import List
 
 """Empty message classes to agree on the message types.
 """
@@ -12,14 +12,14 @@ class LaserScanMessage:
     stamp_s: float = None  # acquisition time of the first ray in the scan.
     angle_min_rad: float = None  # start angle of the scan [rad]
     angle_max_rad: float = None  # end angle of the scan [rad]
-    angle_increment_rad: float = None  # angular distance between measurements [rad]
     time_increment_s: float = None  # time between measurements [seconds]
     range_min_m: float = None  # minimum range value [m]
     range_max_m: float = None  # maximum range value [m]
-    ranges: List[float] = field(default_factory=[])  # range data [m]
+    ranges: List[float] = field(default_factory=list)  # range data [m]
+    angles: List[float] = field(default_factory=list)  # angle data [m]
     # (Note: values < range_min or > range_max should be discarded)
     intensities: List[float] = field(
-        default_factory=[]
+        default_factory=list
     )  # intensity data [device-specific units]
 
     def __post_init__(self):

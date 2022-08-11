@@ -8,6 +8,10 @@ sensors:
     parameters:
       port: /dev/ttyUSB0
       baudrate: 115200
+      range_min_m: 0.2
+      range_max_m: 2.0
+      angle_min_rad: -1.57
+      angle_max_rad: 1.57
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
