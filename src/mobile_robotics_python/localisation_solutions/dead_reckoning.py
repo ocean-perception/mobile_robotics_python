@@ -28,12 +28,12 @@ class DeadReckoning:
         self.state.x_m = (
             self.state.x_m
             + self.state.vx_mps * dt_s
-            + 0.5 * self.state.ax_mpss * dt_s**2
+        #    + 0.5 * self.state.ax_mpss * dt_s**2
         )
         self.state.y_m = (
             self.state.y_m
             + self.state.vy_mps * dt_s
-            + 0.5 * self.state.ay_mpss * dt_s**2
+        #    + 0.5 * self.state.ay_mpss * dt_s**2
         )
 
         return self.state
