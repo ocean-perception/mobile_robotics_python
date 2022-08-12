@@ -26,7 +26,7 @@ class ArUcoUDP(SensorDriverBase):
         self.th.start()
 
         # -- data recieved
-        self.data = [None] * 8
+        self.data = [0] * 8
 
     def loop(self):
         r = Rate(10)
@@ -35,6 +35,7 @@ class ArUcoUDP(SensorDriverBase):
                 broadcast_data, _ = self.client.recvfrom(1024)
                 result = json.loads(broadcast_data)
                 self.data = result.get(str(self.marker_id), None)
+                print(self.data)
 
             except Exception as e:
                 print("Got exception trying to recv %s" % e)
@@ -48,11 +49,11 @@ class ArUcoUDP(SensorDriverBase):
             return msg
         msg.stamp_s = self.data[0]
         msg.x_m = self.data[2]
-        msg.y_m = self.data(3)
-        msg.z_m = self.data(4)
-        msg.roll_rad = self.data(5)
-        msg.pitch_rad = self.data(6)
-        msg.yaw_rad = self.data(7)
+        msg.y_m = self.data[3]
+        msg.z_m = self.data[4]
+        msg.roll_rad = self.data[5]
+        msg.pitch_rad = self.data[6]
+        msg.yaw_rad = self.data[7]
 
     def __del__(self):
         self.client.close()
