@@ -2,9 +2,10 @@ from pitop.robotics.drive_controller import DriveController
 
 from mobile_robotics_python import Console
 from mobile_robotics_python.messages import SpeedRequestMessage
+from . import ActuatorDriverBase
 
 
-class PiTopMotors:
+class PiTopMotors(ActuatorDriverBase):
     def __init__(self, params):
         self.ready = False
         try:

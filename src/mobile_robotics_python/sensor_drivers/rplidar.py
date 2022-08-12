@@ -9,6 +9,8 @@ from mobile_robotics_python import Rate
 from mobile_robotics_python.messages import LaserScanMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
 
+from . import SensorDriverBase
+
 """
 RPLIDAR driver from
 https://gist.github.com/stmobo/762f448c8e51cc7dfebde58165412654?permalink_comment_id=3626093
@@ -435,7 +437,7 @@ class RPLidarImpl:
         self.sleep(0.020)
 
 
-class RPLidar:
+class RPLidar(SensorDriverBase):
     def __init__(self, params):
         self._lidar = RPLidarImpl(
             serial_type="pyserial", port=params["port"], read_timeout=0.1

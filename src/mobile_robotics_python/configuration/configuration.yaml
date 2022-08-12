@@ -51,6 +51,14 @@ sensors:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
 
+  battery:
+    name: pitop_battery
+    driver: pitop_battery
+
+  screen:
+    name: pitop_screen
+    driver: pitop_screen
+
 control:
   mission:
     name: square_1m.yaml

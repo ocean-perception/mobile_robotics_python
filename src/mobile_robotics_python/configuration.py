@@ -29,6 +29,8 @@ class SensorsConfiguration(BaseModel):
     compass: Optional[SensorConfiguration] = None
     encoder: Optional[SensorConfiguration] = None
     external_positioning: Optional[SensorConfiguration] = None
+    battery: Optional[EntryWithParams] = None
+    screen: Optional[EntryWithParams] = None
 
 
 class MissionConfiguration(BaseModel):

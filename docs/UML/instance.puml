@@ -1,0 +1,141 @@
+@startuml
+class BaseLoggable {
+  {field} logger
+  {method} log(msg)
+}
+
+class BaseSensor {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class Battery {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class Screen {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class Compass {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class Encoder {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class Lidar {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class ExternalPositioning {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class PiTopBattery {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class PiTopScreen {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class PiTopCompass {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class PiTopEncoder {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class RPLidar {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class ArUcoUDP {
+  {field} driver
+  {field} name
+  {field} parameters
+  {field} pose
+  {method} read()
+}
+
+class Motors {
+  {field} driver
+  {field} name
+  {field} parameters
+  {method} move()
+}
+
+class PiTopMotors {
+  {field} driver
+  {field} name
+  {field} parameters
+  {method} move()
+}
+
+BaseLoggable <|-- BaseSensor : inherits
+BaseSensor <|-- Battery : inherits
+BaseSensor <|-- Screen : inherits
+BaseSensor <|-- Compass : inherits
+BaseSensor <|-- Encoder : inherits
+BaseSensor <|-- Lidar : inherits
+BaseSensor <|-- ExternalPositioning : inherits
+Battery *-- PiTopBattery : implements
+Screen *-- PiTopScreen : implements
+Compass *-- PiTopCompass : implements
+Encoder *-- PiTopEncoder : implements
+Lidar *-- RPLidar : implements
+ExternalPositioning *-- ArUcoUDP : implements
+
+BaseLoggable <|-- Motors : inherits
+Motors *-- PiTopMotors : implements
+@enduml
