@@ -1,4 +1,5 @@
 import pprint
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
@@ -56,6 +57,10 @@ class Configuration(BaseModel):
         data = yaml.safe_load(f)
         super().__init__(**data)
         self.filename = filename
+        self.logging_folder = Path(self.logging_folder)
+        now = datetime.now()
+        date_str = now.strftime("%Y%m%d_%H%M%S")
+        self.logging_folder = self.logging_folder / date_str
         Console.info("Loaded valid configuration file")
 
     def print(self):
