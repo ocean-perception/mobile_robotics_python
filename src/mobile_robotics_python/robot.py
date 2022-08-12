@@ -7,7 +7,7 @@ from .localisation import Localisation
 from .mission_control import MissionControl
 from .motors import Motors
 from .navigation import Navigation
-from .sensors import Compass, Encoder, ExternalPositioning, Lidar
+from .sensors import Battery, Compass, Encoder, ExternalPositioning, Lidar, Screen
 from .tools import Console
 from .tools.rate import Rate
 
@@ -38,6 +38,10 @@ class Robot:
             self.external_positioning = ExternalPositioning(
                 config.sensors.external_positioning, config.logging_folder
             )
+        if config.sensors.battery is not None:
+            self.battery = Battery(config.sensors.battery, config.logging_folder)
+        if config.sensors.screen is not None:
+            self.screen = Screen(config.sensors.screen, config.logging_folder)
 
         # Create controllers
         self.localisation = Localisation(
