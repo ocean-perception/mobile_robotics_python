@@ -46,7 +46,7 @@ sensors:
     parameters:
       port: 50000
       timeout: 15
-      marker_id: 1
+      marker_id: 6
     pose:
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
