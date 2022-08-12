@@ -2,9 +2,10 @@ import numpy as np
 
 from mobile_robotics_python.messages import RobotStateMessage, SpeedRequestMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
+from . import NavigationSolutionBase
 
 
-class NaiveRotateMove:
+class NaiveRotateMove(NavigationSolutionBase):
     def __init__(self, parameters):
         self.parameters = parameters
         self.orientation_threshold = parameters["orientation_threshold"]
@@ -26,7 +27,7 @@ class NaiveRotateMove:
         diff_y = desired_position.y_m - current_position.y_m
         desired_theta = np.arctan2(diff_y, diff_x)
         diff_theta = desired_theta - current_position.yaw_rad
-        distance = (diff_x**2 + diff_y**2) ** 0.5
+        distance = (diff_x ** 2 + diff_y ** 2) ** 0.5
         msg = SpeedRequestMessage()
         msg.stamp_s = get_utc_stamp()
         msg.vx_mps = 0

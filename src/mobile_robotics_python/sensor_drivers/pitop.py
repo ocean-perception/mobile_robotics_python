@@ -6,8 +6,10 @@ from mobile_robotics_python import Console
 from mobile_robotics_python.messages import RobotStateMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
 
+from . import SensorDriverBase
 
-class PiTopCompass:
+
+class PiTopCompass(SensorDriverBase):
     def __init__(self, params):
         self.ready = False
         try:
@@ -49,7 +51,7 @@ def create_encoder(params):
         return None
 
 
-class PiTopEncoder:
+class PiTopEncoder(SensorDriverBase):
     def __init__(self, params):
         self._left_encoder = create_encoder(params["left"])
         self._right_encoder = create_encoder(params["right"])
@@ -96,7 +98,7 @@ class PiTopEncoder:
         return msg
 
 
-class PiTopBattery:
+class PiTopBattery(SensorDriverBase):
     def __init__(self, params):
         self.ready = False
         try:
@@ -113,7 +115,7 @@ class PiTopBattery:
         print(f"Battery wattage: {self._battery.wattage}")
 
 
-class PiTopScreen:
+class PiTopScreen(SensorDriverBase):
     def __init__(self, params):
         self.ready = False
         try:

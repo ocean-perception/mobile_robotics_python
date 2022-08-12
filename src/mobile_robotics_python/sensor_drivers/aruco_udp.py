@@ -4,9 +4,10 @@ from threading import Thread
 
 from mobile_robotics_python import Rate
 from mobile_robotics_python.messages import RobotStateMessage
+from . import SensorDriverBase
 
 
-class ArUcoUDP:
+class ArUcoUDP(SensorDriverBase):
     def __init__(self, params):
         # -- UDP
         self.client = socket.socket(

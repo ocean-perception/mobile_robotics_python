@@ -1,9 +1,10 @@
 from typing import Optional
 
 from mobile_robotics_python.messages import RobotStateMessage
+from . import LocalisationSolutionBase
 
 
-class DeadReckoning:
+class DeadReckoning(LocalisationSolutionBase):
     def __init__(self, parameters, initial_state: Optional[RobotStateMessage] = None):
         """Initialise the dead reckoning algorithm.
 
