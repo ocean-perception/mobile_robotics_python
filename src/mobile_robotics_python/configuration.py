@@ -44,8 +44,16 @@ class ControlConfiguration(BaseModel):
     navigation: EntryWithParams
 
 
+class RemoteConfiguration(BaseModel):
+    ip: str
+    username: str
+    password: str
+    upload_destination: str
+
+
 class Configuration(BaseModel):
     robot_name: str
+    remote: RemoteConfiguration
     sensors: SensorsConfiguration
     control: ControlConfiguration
     motors: EntryWithParams

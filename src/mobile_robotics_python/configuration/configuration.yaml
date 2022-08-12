@@ -1,6 +1,12 @@
 robot_name: pitop_robot
 logging_folder: logs
 
+remote:
+  ip: "192.168.0.100"
+  username: "pi"
+  password: "raspberry"
+  upload_destination: "/home/pi/git"
+
 sensors:
   lidar:
     name: pitop_lidar
