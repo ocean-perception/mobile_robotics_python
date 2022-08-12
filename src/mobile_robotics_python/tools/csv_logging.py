@@ -6,9 +6,8 @@ from .console import Console
 
 class Logger:
     def __init__(self, name: str, logging_folder: str):
-        mission_folder = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
         filename = self.stamp() + "_" + name + "_log.csv"
-        logging_folder_path = Path(logging_folder) / mission_folder
+        logging_folder_path = Path(logging_folder)
         if not logging_folder_path.exists():
             logging_folder_path.mkdir(parents=True, exist_ok=True)
         self.filename = logging_folder_path / filename
