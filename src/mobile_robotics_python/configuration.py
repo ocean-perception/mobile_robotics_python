@@ -6,7 +6,7 @@ from typing import List, Optional
 import yaml
 from pydantic import BaseModel
 
-from mobile_robotics_python import Console
+from mobile_robotics_python.tools.console import Console
 
 
 class PoseDict(BaseModel):
