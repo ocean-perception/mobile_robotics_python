@@ -77,7 +77,6 @@ class Robot:
                 #measurements.append(msg)
             if self.lidar is not None:
                 msg = self.lidar.read()
-                print(msg)
 
             # Update navigation
             if len(measurements) > 0:
