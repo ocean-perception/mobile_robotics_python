@@ -1,0 +1,10 @@
+@startuml
+
+Title Simplified Code Loop
+
+
+[Think] <|- [Sense]
+[Act] <|-- [Think]
+[Sense] <|-- [Act]
+
+@enduml
