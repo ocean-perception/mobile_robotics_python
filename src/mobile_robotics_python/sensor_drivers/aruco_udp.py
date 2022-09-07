@@ -19,28 +19,25 @@ class ArUcoUDP(SensorDriverBase):
 
         # -- Enable broadcasting mode
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        self.client.settimeout(params["timeout"])
+        #self.client.settimeout(params["timeout"])
         self.client.bind(("", params["port"]))
         self.marker_id = params["marker_id"]
         self.th = Thread(target=self.loop, daemon=True)
         self.th.start()
 
         # -- data recieved
-        self.data = [0] * 8
+        self.data = [None] * 8
 
     def loop(self):
-        r = Rate(10)
         while True:
+            print("waiting for data...")
             try:
-                broadcast_data, _ = self.client.recvfrom(1024)
+                broadcast_data, _ = self.client.recvfrom(4096)
                 result = json.loads(broadcast_data)
                 self.data = result.get(str(self.marker_id), None)
-                print(self.data)
 
             except Exception as e:
                 print("Got exception trying to recv %s" % e)
-                raise StopIteration
-            r.sleep()
 
     def read(self) -> RobotStateMessage:
         # TODO convert self.data to RobotStateMessage
@@ -54,6 +51,7 @@ class ArUcoUDP(SensorDriverBase):
         msg.roll_rad = self.data[5]
         msg.pitch_rad = self.data[6]
         msg.yaw_rad = self.data[7]
+        return msg
 
     def __del__(self):
         self.client.close()

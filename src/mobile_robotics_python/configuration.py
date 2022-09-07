@@ -1,11 +1,12 @@
 import pprint
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
 import yaml
 from pydantic import BaseModel
 
-from mobile_robotics_python import Console
+from mobile_robotics_python.tools.console import Console
 
 
 class PoseDict(BaseModel):
@@ -43,8 +44,16 @@ class ControlConfiguration(BaseModel):
     navigation: EntryWithParams
 
 
+class RemoteConfiguration(BaseModel):
+    ip: str
+    username: str
+    password: str
+    upload_destination: str
+
+
 class Configuration(BaseModel):
     robot_name: str
+    remote: RemoteConfiguration
     sensors: SensorsConfiguration
     control: ControlConfiguration
     motors: EntryWithParams
@@ -58,6 +67,10 @@ class Configuration(BaseModel):
         data = yaml.safe_load(f)
         super().__init__(**data)
         self.filename = filename
+        self.logging_folder = Path(self.logging_folder)
+        now = datetime.now()
+        date_str = now.strftime("%Y%m%d_%H%M%S")
+        self.logging_folder = self.logging_folder / date_str
         Console.info("Loaded valid configuration file")
 
     def print(self):
