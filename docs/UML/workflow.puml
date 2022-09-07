@@ -1,0 +1,44 @@
+@startuml
+
+class Localisation {
+  {field} name
+  {field} driver
+  {field} parameters
+  {method} predict()
+  {method} update()
+}
+
+class Navigation {
+  {field} name
+  {field} driver
+  {field} parameters
+  {method} compute_request()
+}
+
+class NaiveRotateMove {
+  {field} parameters
+  {method} compute_request()
+}
+
+class DeadReckoning {
+  {field} parameters
+  {method} predict()
+  {method} update()
+}
+
+class Robot {
+  .. Sensors ..
+  {field} compass
+  {field} encoder
+  {field} lidar
+  .. Actuators .. 
+  {field} motors
+  .. Control ..
+  {field} localisation
+  {field} navigation
+  {method} run()
+}
+
+Navigation *-- NaiveRotateMove : implements
+Localisation *-- DeadReckoning : implements
+@enduml
