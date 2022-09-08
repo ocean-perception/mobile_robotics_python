@@ -1,0 +1,43 @@
+@startuml
+class BaseLoggable {
+  {field} stamp_s
+  {field} angles
+  {field} ranges
+  {field} intensities
+  {field} time_increment_s
+  {field} angle_min_rad
+  {field} angle_max_rad
+  {field} range_min_m
+  {field} range_max_m
+}
+
+class RobotStateMessage {
+  {field} stamp_s
+  {field} x_m
+  {field} y_m
+  {field} z_m
+  {field} roll_rad
+  {field} pitch_rad
+  {field} yaw_rad
+  {field} vx_mps
+  {field} vy_mps
+  {field} vz_mps
+  {field} wx_radps
+  {field} wy_radps
+  {field} wz_radps
+  {field} ax_mpss
+  {field} ay_mpss
+  {field} az_mpss
+}
+
+class SpeedRequestMessage {
+  {field} stamp_s
+  {field} vx_mps
+  {field} vy_mps
+  {field} vz_mps
+  {field} wx_radps
+  {field} wy_radps
+  {field} wz_radps
+}
+
+@enduml
