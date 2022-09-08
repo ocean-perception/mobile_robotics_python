@@ -133,3 +133,7 @@ class PiTopScreen(SensorDriverBase):
 
     def print(self, msg):
         self._display.display_multiline_text(msg, font_size=20)
+
+    def print_pixel_list(self, pixel_list: list):
+        # Not implemented
+        pass

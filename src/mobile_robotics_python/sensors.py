@@ -3,6 +3,7 @@ from .messages import LaserScanMessage, RobotStateMessage, SpeedRequestMessage
 from .sensor_drivers.aruco_udp import ArUcoUDP
 from .sensor_drivers.pitop import PiTopBattery, PiTopCompass, PiTopEncoder, PiTopScreen
 from .sensor_drivers.rplidar import RPLidar
+from .sensor_drivers.sense_hat import SenseHatCompass, SenseHatScreen
 from .tools import Console, Logger, Pose
 
 
@@ -167,6 +168,8 @@ class Compass(BaseSensor):
         super().__init__(config, logging_folder)
         if self.driver == "pitop_compass":
             self._impl = PiTopCompass(self.parameters)
+        elif self.driver == "sensehat_compass":
+            self._impl = SenseHatCompass(self.parameters)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
         self.yaw_rad = 0.0
@@ -227,6 +230,8 @@ class Screen(BaseSensor):
         super().__init__(config, logging_folder, has_pose=False)
         if self.driver == "pitop_screen":
             self._impl = PiTopScreen(self.parameters)
+        elif self.driver == "sensehat_screen":
+            self._impl = SenseHatScreen(self.parameters)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
 
@@ -237,3 +242,6 @@ class Screen(BaseSensor):
 
     def print(self, mgs: str):
         self._impl.print(mgs)
+
+    def print_pixel_list(self, pixel_list: list):
+        self._impl.print_pixel_list(pixel_list)

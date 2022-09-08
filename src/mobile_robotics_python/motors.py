@@ -1,6 +1,7 @@
 from mobile_robotics_python import Console
 
 from .actuator_drivers.pitop import PiTopMotors
+from .actuator_drivers.pololu_micromaestro import PololuMicroMaestro
 from .configuration import EntryWithParams
 from .messages import SpeedRequestMessage
 from .sensors import BaseLoggable
@@ -14,6 +15,8 @@ class Motors(BaseLoggable):
         self.parameters = config.parameters
         if self.driver == "pitop_motors":
             self._impl = PiTopMotors(self.parameters)
+        elif self.driver == "pololu_motors":
+            self._impl = PololuMicroMaestro(self.parameters)
         else:
             print(f"Unknown motor driver {self.driver}")
         Console.info("  * Adding motors:", self.name)
