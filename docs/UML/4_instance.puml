@@ -1,4 +1,9 @@
-@startuml
+@startuml sensor_types.png
+
+title Sensor types
+caption Figure 4: Sensor classes and inheritances
+footer © 2022, Intelligent Mobile Robotics, University of Southampton
+
 class BaseLoggable {
   {field} logger
   {method} log(msg)

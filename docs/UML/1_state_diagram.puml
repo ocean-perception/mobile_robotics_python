@@ -1,0 +1,46 @@
+@startuml state_diagram.png
+top to bottom direction
+
+<style>
+  diamond {
+    BackgroundColor #LightBlue
+    LineColor #Gray
+    LineThickness 1.0
+  }
+</style>
+
+title State diagram
+caption Figure 1: State diagram for mobile_robotics_python
+footer © 2022, Intelligent Mobile Robotics, University of Southampton
+
+state "Initialisation" as Init
+state "Read sensors" as ReadSensors
+state "Update position" as UpdatePosition
+state c <<choice>>
+state d <<choice>>
+state "Update waypoint" as UpdateWaypoint
+
+[*] --> Init
+Init -d-> ReadSensors
+ReadSensors -d-> UpdatePosition
+UpdatePosition --> c
+c -d-> Move : Not arrived to goal
+c --> UpdateWaypoint : Arrived to goal
+UpdateWaypoint --> d
+d --> [*] : None
+d --> Move : More waypoints
+Move --> ReadSensors
+
+Init : Load configuration file
+Init : Setup sensors and actuators
+Init : Read mission waypoints
+Init : Set first waypoint as goal
+ReadSensors : Reads all sensor data
+UpdatePosition : Use your motion model
+UpdatePosition : or a Bayesian filter
+UpdateWaypoint : Retrieve the next
+UpdateWaypoint : waypoint from the list
+Move : Use your motors or propellers
+Move : to reach the waypoint
+
+@enduml

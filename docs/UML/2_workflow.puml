@@ -1,4 +1,8 @@
-@startuml
+@startuml workflow.png
+
+title Robot workflow
+caption Figure 2: Localisation and navigation robot workflow
+footer © 2022, Intelligent Mobile Robotics, University of Southampton
 
 class Localisation {
   {field} name
@@ -27,18 +31,20 @@ class DeadReckoning {
 }
 
 class Robot {
-  .. Sensors ..
+  .. Sense ..
   {field} compass
   {field} encoder
   {field} lidar
-  .. Actuators .. 
-  {field} motors
-  .. Control ..
+  .. Think ..
   {field} localisation
   {field} navigation
   {method} run()
+  .. Act ..
+  {field} motors
 }
 
 Navigation *-- NaiveRotateMove : implements
 Localisation *-- DeadReckoning : implements
+Navigation -u-> Robot : uses
+Localisation -u-> Robot : uses
 @enduml

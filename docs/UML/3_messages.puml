@@ -1,5 +1,11 @@
-@startuml
-class BaseLoggable {
+@startuml message_types.png
+top to bottom direction
+
+title Messages types
+caption Figure 3: Message definitions for mobile_robotics_python
+footer © 2022, Intelligent Mobile Robotics, University of Southampton
+
+class LaserScanMessage {
   {field} stamp_s
   {field} angles
   {field} ranges
@@ -39,5 +45,8 @@ class SpeedRequestMessage {
   {field} wy_radps
   {field} wz_radps
 }
+
+LaserScanMessage --[hidden]r> RobotStateMessage
+RobotStateMessage --[hidden]r> SpeedRequestMessage
 
 @enduml
