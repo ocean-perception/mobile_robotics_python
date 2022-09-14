@@ -29,15 +29,15 @@ class SenseHatCompass(SensorDriverBase):
         accel_only = self._dev.get_accelerometer()
         gyro_only = self._dev.get_gyroscope()
 
-        msg.roll_rad = orientation_rad.roll
-        msg.pitch_rad = orientation_rad.pitch
-        msg.yaw_rad = orientation_rad.yaw
-        msg.wx_radps = gyro_only.roll
-        msg.wy_radps = gyro_only.pitch
-        msg.wz_radps = gyro_only.yaw
-        msg.ax_mpss = accel_only.roll
-        msg.ay_mpss = accel_only.pitch
-        msg.az_mpss = accel_only.yaw
+        msg.roll_rad = orientation_rad["roll"]
+        msg.pitch_rad = orientation_rad["pitch"]
+        msg.yaw_rad = orientation_rad["yaw"]
+        msg.wx_radps = gyro_only["roll"]
+        msg.wy_radps = gyro_only["pitch"]
+        msg.wz_radps = gyro_only["yaw"]
+        msg.ax_mpss = accel_only["roll"]
+        msg.ay_mpss = accel_only["pitch"]
+        msg.az_mpss = accel_only["yaw"]
 
         return msg
 
