@@ -39,6 +39,7 @@ def run_setup():
             "pytransform3d",
             "pitop",
             "pydantic",
+            "paramiko",
         ],
         author="Ocean Perception - University of Southampton",
         author_email="miquel.massot-campos@soton.ac.uk",
