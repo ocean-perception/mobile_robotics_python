@@ -39,6 +39,7 @@ def main():
 
         try:
             import paramiko  # NOQA F401
+
             from .remote import SftpConnection
         except ImportError:
             Console.warn("The python package 'paramiko' is not available")
@@ -58,6 +59,7 @@ def main():
     if args.connect:
         try:
             import paramiko  # NOQA F401
+
             from .remote import SshConnection
         except ImportError:
             Console.warn("The python package 'paramiko' is not available")

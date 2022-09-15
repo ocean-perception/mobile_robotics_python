@@ -9,10 +9,9 @@ import datetime
 import getpass
 import logging
 import socket
+import sys
 import timeit
 from pathlib import Path
-import sys
-
 
 import pkg_resources
 

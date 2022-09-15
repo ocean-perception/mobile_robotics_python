@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from .tools.pose import PoseManager
-
 from .configuration import Configuration
 from .localisation import Localisation
 from .mission_control import MissionControl
@@ -9,6 +7,7 @@ from .motors import Motors
 from .navigation import Navigation
 from .sensors import Battery, Compass, Encoder, ExternalPositioning, Lidar, Screen
 from .tools import Console
+from .tools.pose import PoseManager
 from .tools.rate import Rate
 
 

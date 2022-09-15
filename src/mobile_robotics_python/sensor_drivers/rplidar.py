@@ -6,8 +6,7 @@ import numpy as np
 import serial
 
 from mobile_robotics_python import Rate
-from mobile_robotics_python.messages import RobotStateMessage
-from mobile_robotics_python.messages import LaserScanMessage
+from mobile_robotics_python.messages import LaserScanMessage, RobotStateMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
 
 from . import SensorDriverBase
