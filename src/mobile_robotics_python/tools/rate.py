@@ -19,14 +19,14 @@ class Rate:
     Convenience class for sleeping in a loop at a specified rate
     """
 
-    def __init__(self, hz):
+    def __init__(self, frequency_hz):
         """
         Constructor.
-        @param hz: hz rate to determine sleeping
-        @type  hz: int
+        @param frequency_hz: Frequency rate in Hz to determine sleeping
+        @type  frequency_hz: float
         """
         self.last_time = get_time()
-        self.sleep_dur = 1.0 / hz
+        self.sleep_dur = 1.0 / frequency_hz
 
     def _remaining(self, curr_time):
         """

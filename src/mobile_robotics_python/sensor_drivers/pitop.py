@@ -18,7 +18,7 @@ class PiTopCompass(SensorDriverBase):
         except Exception as e:
             Console.warn("    PiTopCompass could not be initialised. Error:", e)
 
-    def read(self) -> RobotStateMessage:
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
         if not self.ready:
             Console.warn("    PiTopCompass is not ready")
             return RobotStateMessage()
@@ -63,10 +63,9 @@ class PiTopEncoder(SensorDriverBase):
         self.previous_stamp = get_utc_stamp()
         self.previous_left = self._left_encoder.distance
         self.previous_right = self._right_encoder.distance
-        self.yaw_rad = 0.0
         self.ready = True
 
-    def read(self) -> RobotStateMessage:
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
         if not self.ready:
             Console.warn("    PiTopEncoder is not ready")
             return RobotStateMessage()
@@ -92,8 +91,8 @@ class PiTopEncoder(SensorDriverBase):
 
         msg = RobotStateMessage()
         msg.stamp_s = (ts + self.previous_stamp) / 2
-        msg.vx_mps = linear_velocity * np.cos(self.yaw_rad)
-        msg.vy_mps = linear_velocity * np.sin(self.yaw_rad)
+        msg.vx_mps = linear_velocity * np.cos(robot_state.yaw_rad)
+        msg.vy_mps = linear_velocity * np.sin(robot_state.yaw_rad)
         msg.wz_radps = angular_velocity
         return msg
 
@@ -107,7 +106,7 @@ class PiTopBattery(SensorDriverBase):
         except Exception as e:
             Console.warn("    PiTopBattery could not be initialised. Error:", e)
 
-    def read(self):
+    def read(self, robot_state: RobotStateMessage):
         print(f"Battery capacity: {self._battery.capacity}")
         print(f"Battery time remaining: {self._battery.time_remaining}")
         print(f"Battery is charging: {self._battery.is_charging}")
@@ -125,7 +124,7 @@ class PiTopScreen(SensorDriverBase):
         except Exception as e:
             Console.warn("    PiTopScreen could not be initialised. Error:", e)
 
-    def read(self):
+    def read(self, robot_state: RobotStateMessage):
         print(f"Display brightness: {self._display.brightness}")
         print(f"Display blanking timeout: {self._display.blanking_timeout}")
         print(f"Display backlight is on: {self._display.backlight}")

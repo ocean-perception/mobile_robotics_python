@@ -1,6 +1,7 @@
 from typing import Optional
 
 from mobile_robotics_python.messages import RobotStateMessage
+
 from . import LocalisationSolutionBase
 
 
@@ -23,26 +24,37 @@ class DeadReckoning(LocalisationSolutionBase):
             self.state = initial_state
 
     def predict(self, stamp_s: float) -> RobotStateMessage:
+        """Predicts the state at the given time stamp.
 
+        Parameters
+        ----------
+        stamp_s : float
+            Time stamp to predict the state at.
+
+        Returns
+        -------
+        RobotStateMessage
+            Predicted state.
+        """
         dt_s = stamp_s - self.state.stamp_s
-
-        self.state.x_m = (
-            self.state.x_m
-            + self.state.vx_mps * dt_s
-            #    + 0.5 * self.state.ax_mpss * dt_s**2
-        )
-        self.state.y_m = (
-            self.state.y_m
-            + self.state.vy_mps * dt_s
-            #    + 0.5 * self.state.ay_mpss * dt_s**2
-        )
-
         self.state.stamp_s = stamp_s
-
+        self.state.x_m = self.state.x_m + self.state.vx_mps * dt_s
+        self.state.y_m = self.state.y_m + self.state.vy_mps * dt_s
         return self.state
 
     def update(self, msg: RobotStateMessage) -> RobotStateMessage:
-        # TODO make this update generic for all fields
+        """Updates the state with the given measurement message.
+
+        Parameters
+        ----------
+        msg : RobotStateMessage
+            Measurement message.
+
+        Returns
+        -------
+        RobotStateMessage
+            Updated state.
+        """
         if msg.x_m is not None:
             self.state.x_m = msg.x_m
         if msg.y_m is not None:

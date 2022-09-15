@@ -2,8 +2,8 @@ import json
 import socket
 from threading import Thread
 
-from mobile_robotics_python import Rate
 from mobile_robotics_python.messages import RobotStateMessage
+
 from . import SensorDriverBase
 
 
@@ -19,7 +19,7 @@ class ArUcoUDP(SensorDriverBase):
 
         # -- Enable broadcasting mode
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        #self.client.settimeout(params["timeout"])
+        # self.client.settimeout(params["timeout"])
         self.client.bind(("", params["port"]))
         self.marker_id = params["marker_id"]
         self.th = Thread(target=self.loop, daemon=True)
@@ -40,7 +40,6 @@ class ArUcoUDP(SensorDriverBase):
                 print("Got exception trying to recv %s" % e)
 
     def read(self) -> RobotStateMessage:
-        # TODO convert self.data to RobotStateMessage
         msg = RobotStateMessage()
         if self.data is None:
             return msg

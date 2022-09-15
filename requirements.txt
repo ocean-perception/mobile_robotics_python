@@ -5,3 +5,4 @@ matplotlib,
 pytranform3d,
 pitop,
 pydantic,
+paramiko,  # For remote SSH connection

@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
 
+import numpy as np
+import numpy.typing as npt
+
 """Empty message classes to agree on the message types.
 """
 
@@ -58,6 +61,7 @@ class RobotStateMessage:
     ax_mpss: float = None  # linear acceleration in x [m/s^2]
     ay_mpss: float = None  # linear acceleration in y [m/s^2]
     az_mpss: float = None  # linear acceleration in z [m/s^2]
+    covariance: npt.ArrayLike = None  # uncertainty of the state estimate
 
     def __post_init__(self):
         self.stamp_s = get_utc_stamp()
@@ -78,3 +82,4 @@ class RobotStateMessage:
         self.ax_mpss = 0
         self.ay_mpss = 0
         self.az_mpss = 0
+        self.covariance = np.zeros((15, 15))

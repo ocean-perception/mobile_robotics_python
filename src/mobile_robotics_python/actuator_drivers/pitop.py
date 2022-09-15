@@ -2,12 +2,16 @@ from pitop.robotics.drive_controller import DriveController
 
 from mobile_robotics_python import Console
 from mobile_robotics_python.messages import SpeedRequestMessage
+
 from . import ActuatorDriverBase
 
 
 class PiTopMotors(ActuatorDriverBase):
-    def __init__(self, params):
+    def __init__(self):
         self.ready = False
+        self.name = "pitop_motors"
+
+    def init(self, params):
         try:
             self._ctrl = DriveController(
                 params["left"]["port"], params["right"]["port"]

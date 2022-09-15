@@ -10,8 +10,11 @@ from .maestro_controller import Controller
 
 
 class PololuMicroMaestro(ActuatorDriverBase):
-    def __init__(self, params):
+    def __init__(self):
         self.ready = False
+        self.name = "pololu_motors"
+
+    def init(self, params):
         try:
             self._ctrl = Controller()
 
@@ -45,8 +48,8 @@ class PololuMicroMaestro(ActuatorDriverBase):
         # Use a TAM to transform the speeds to RPMs
         req = np.array([[msg.vx_mps], [msg.wz_radps]])
         rpm = self.tam @ req + 5600
-        self._ctrl.setTarget(self.left_idx, rpm[0, 0])
-        self._ctrl.setTarget(self.left_idx, rpm[1, 0])
+        self._ctrl.setTarget(self.left_idx, int(rpm[0, 0]))
+        self._ctrl.setTarget(self.left_idx, int(rpm[1, 0]))
 
     def __del__(self):
         if self.ready:

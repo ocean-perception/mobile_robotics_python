@@ -19,7 +19,7 @@ class SenseHatCompass(SensorDriverBase):
         except Exception as e:
             Console.warn("    SenseHatCompass could not be initialised. Error:", e)
 
-    def read(self) -> RobotStateMessage:
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
         if not self.ready:
             Console.warn("    SenseHatCompass is not ready")
             return RobotStateMessage()
@@ -64,7 +64,7 @@ class SenseHatScreen(SensorDriverBase):
         except Exception as e:
             Console.warn("    SenseHatScreen could not be initialised. Error:", e)
 
-    def read(self):
+    def read(self, robot_state: RobotStateMessage):
         # Not implemented
         pass
 

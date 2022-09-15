@@ -157,8 +157,8 @@ class Lidar(BaseSensor):
         else:
             Console.error(f"Unknown lidar driver {self.driver}")
 
-    def read(self) -> LaserScanMessage:
-        msg = self._impl.read()
+    def read(self, robot_state: RobotStateMessage) -> LaserScanMessage:
+        msg = self._impl.read(robot_state)
         self.log(msg)
         return msg
 
@@ -172,12 +172,10 @@ class Compass(BaseSensor):
             self._impl = SenseHatCompass(self.parameters)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
-        self.yaw_rad = 0.0
 
-    def read(self) -> RobotStateMessage:
-        msg = self._impl.read()
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
+        msg = self._impl.read(robot_state)
         self.log(msg)
-        self.yaw_rad = msg.yaw_rad
         return msg
 
 
@@ -188,11 +186,9 @@ class Encoder(BaseSensor):
             self._impl = PiTopEncoder(self.parameters)
         else:
             Console.error(f"Unknown encoder driver {self.driver}")
-        self.yaw_rad = 0.0
 
-    def read(self) -> RobotStateMessage:
-        self._impl.yaw_rad = self.yaw_rad
-        msg = self._impl.read()
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
+        msg = self._impl.read(robot_state)
         self.log(msg)
         return msg
 
@@ -205,8 +201,8 @@ class ExternalPositioning(BaseSensor):
         else:
             Console.error(f"Unknown compass driver {self.driver}")
 
-    def read(self) -> RobotStateMessage:
-        msg = self._impl.read()
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
+        msg = self._impl.read(robot_state)
         self.log(msg)
         return msg
 
@@ -219,8 +215,8 @@ class Battery(BaseSensor):
         else:
             Console.error(f"Unknown compass driver {self.driver}")
 
-    def read(self) -> RobotStateMessage:
-        msg = self._impl.read()
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
+        msg = self._impl.read(robot_state)
         self.log(msg)
         return msg
 
@@ -235,8 +231,8 @@ class Screen(BaseSensor):
         else:
             Console.error(f"Unknown compass driver {self.driver}")
 
-    def read(self) -> RobotStateMessage:
-        msg = self._impl.read()
+    def read(self, robot_state: RobotStateMessage) -> RobotStateMessage:
+        msg = self._impl.read(robot_state)
         self.log(msg)
         return msg
 

@@ -2,7 +2,6 @@ import argparse
 import pathlib
 
 from .configuration import Configuration
-from .remote import SftpConnection, SshConnection
 from .robot import Robot
 from .tools import Console
 
@@ -37,12 +36,38 @@ def main():
         robot.run()
 
     if args.upload:
+
+        try:
+            import paramiko  # NOQA F401
+            from .remote import SftpConnection
+        except ImportError:
+            Console.warn("The python package 'paramiko' is not available")
+            if Console.query_yes_no("Do you want to install it?", default="no"):
+                import subprocess
+
+                subprocess.run(["pip", "install", "paramiko"])
+                from .remote import SftpConnection
+            else:
+                return
+
         Console.info("Uploading the code to the robot")
 
         source_directory = pathlib.Path(__file__).parents[2].absolute()
         SftpConnection(c, source_directory)
 
     if args.connect:
+        try:
+            import paramiko  # NOQA F401
+            from .remote import SshConnection
+        except ImportError:
+            Console.warn("The python package 'paramiko' is not available")
+            if Console.query_yes_no("Do you want to install it?", default="no"):
+                import subprocess
+
+                subprocess.run(["pip", "install", "paramiko"])
+                from .remote import SshConnection
+            else:
+                return
         Console.info("Running the code in the robot")
         SshConnection(c)
 

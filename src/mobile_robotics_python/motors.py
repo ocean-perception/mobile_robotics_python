@@ -13,13 +13,15 @@ class Motors(BaseLoggable):
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters
-        if self.driver == "pitop_motors":
-            self._impl = PiTopMotors(self.parameters)
-        elif self.driver == "pololu_motors":
-            self._impl = PololuMicroMaestro(self.parameters)
-        else:
-            print(f"Unknown motor driver {self.driver}")
-        Console.info("  * Adding motors:", self.name)
+        self._impl = None
+        available_drivers = [PiTopMotors(), PololuMicroMaestro()]
+        for driver in available_drivers:
+            if driver.name == self.driver:
+                Console.info("  * Adding motors:", self.name)
+                driver.init(self.parameters)
+                self._impl = driver
+                return
+        print(f"Unknown motor driver {self.driver}")
 
     def move(self, msg: SpeedRequestMessage):
         msg = self._impl.move(msg)

@@ -6,6 +6,7 @@ import numpy as np
 import serial
 
 from mobile_robotics_python import Rate
+from mobile_robotics_python.messages import RobotStateMessage
 from mobile_robotics_python.messages import LaserScanMessage
 from mobile_robotics_python.tools.time import get_utc_stamp
 
@@ -489,7 +490,7 @@ class RPLidar(SensorDriverBase):
             self.process(polled_samples)
             r.sleep()
 
-    def read(self) -> LaserScanMessage:
+    def read(self, robot_state: RobotStateMessage) -> LaserScanMessage:
         return self.msg
 
     def __del__(self):
