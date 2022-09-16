@@ -9,6 +9,7 @@ from .sensors import Battery, Compass, Encoder, ExternalPositioning, Lidar, Scre
 from .tools import Console
 from .tools.pose import PoseManager
 from .tools.rate import Rate
+from .messages import RobotStateMessage
 
 
 class Robot:
@@ -17,6 +18,7 @@ class Robot:
 
         self.poses = PoseManager()
         self._config = config
+        self.state = RobotStateMessage()
 
         Console.info("Initializing robot", config.robot_name, "...")
 
@@ -79,8 +81,9 @@ class Robot:
                 measurements.append((msg, transform, "encoder"))
             if self.external_positioning is not None:
                 msg = self.external_positioning.read(self.state)
-                transform = self.poses.get_transform("external_positioning")
-                measurements.append((msg, transform, "external_positioning"))
+                if msg is not None:
+                    transform = self.poses.get_transform("external_positioning")
+                    measurements.append((msg, transform, "external_positioning"))
             if self.lidar is not None:
                 msg = self.lidar.read(self.state)
                 transform = self.poses.get_transform("lidar")
@@ -89,12 +92,13 @@ class Robot:
             # Update navigation
             if len(measurements) > 0:
                 # Sort measurements by timestamp
-                measurements.sort(key=lambda x: x[0].timestamp)
+                print(measurements)
+                measurements.sort(key=lambda x: x[0].stamp_s)
                 for measurement in measurements:
                     measurement_value = measurement[0]
                     measurement_transform = measurement[1]
                     measurement_name = measurement[2]
-                    self.state = self.localisation.update(measurement)
+                    self.state = self.localisation.update(measurement_value)
 
             self.mission_control.update(self.state)
             speed_request = self.navigation.compute_request(

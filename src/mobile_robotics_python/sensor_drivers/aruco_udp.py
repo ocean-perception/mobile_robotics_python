@@ -26,7 +26,7 @@ class ArUcoUDP(SensorDriverBase):
         self.th.start()
 
         # -- data recieved
-        self.data = [None] * 8
+        self.data = None
 
     def loop(self):
         while True:
@@ -39,10 +39,10 @@ class ArUcoUDP(SensorDriverBase):
             except Exception as e:
                 print("Got exception trying to recv %s" % e)
 
-    def read(self) -> RobotStateMessage:
+    def read(self, state: RobotStateMessage) -> RobotStateMessage:
         msg = RobotStateMessage()
         if self.data is None:
-            return msg
+            return None
         msg.stamp_s = self.data[0]
         msg.x_m = self.data[2]
         msg.y_m = self.data[3]

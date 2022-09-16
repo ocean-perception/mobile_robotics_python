@@ -49,8 +49,8 @@ control:
 
 
 motors:
-  name: pololu_esc_motors
-  driver: pololu_esc_motors
+  name: pololu_motors
+  driver: pololu_motors
   parameters:
     left:
       port: 0

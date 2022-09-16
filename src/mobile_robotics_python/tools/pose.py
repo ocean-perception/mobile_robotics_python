@@ -69,9 +69,9 @@ class Pose:
         return pt.transform_from(
                 pr.active_matrix_from_intrinsic_euler_xyz(self._rpy) , self._xyz)
 
-    def from_trasform(self, transform):
+    def from_transform(self, transform):
         self._xyz = transform[:3, -1]
-        self._rpy = apr.intrinsic_euler_xyz_from_active_matrix(transform, "rxyz")
+        self._rpy = pr.intrinsic_euler_xyz_from_active_matrix(transform[0:3, 0:3])
 
 
 class PoseManager:
@@ -81,7 +81,7 @@ class PoseManager:
     def add_transform(self, pose, frame_id, parent_frame_id="robot"):
         self._tm.add_transform(frame_id, parent_frame_id, pose.get_transform())
 
-    def get_tranform(self, frame_id, parent_frame_id="robot"):
+    def get_transform(self, frame_id, parent_frame_id="robot"):
         p = Pose(frame_id)
         p.from_transform(self._tm.get_transform(frame_id, parent_frame_id))
         return p
