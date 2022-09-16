@@ -1,6 +1,7 @@
 from mobile_robotics_python import Console
 
 from .messages import RobotStateMessage, SpeedRequestMessage
+from .navigation_solutions.line_of_sight import LineOfSight
 from .navigation_solutions.naive_rotate_move import NaiveRotateMove
 
 
@@ -11,6 +12,8 @@ class Navigation:
         self.parameters = config.parameters
         if self.driver == "naive_rotate_move":
             self._impl = NaiveRotateMove(self.parameters)
+        elif self.driver == "line_of_sight":
+            self._impl = LineOfSight(self.parameters)
         else:
             Console.error(f"Unknown localisation solution {self.driver}")
 
