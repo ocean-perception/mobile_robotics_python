@@ -27,11 +27,9 @@ class Motors(BaseLoggable):
         if self.driver == "pitop_motors":
             Console.info("  * Adding motors:", self.name)
             self._impl = PiTopMotors(parent=self)
-            return
         elif self.driver == "pololu_motors":
             Console.info("  * Adding motors:", self.name)
             self._impl = PololuMicroMaestro(parent=self)
-            return
         else:
             Console.error(f"Unknown motors driver {self.driver}")
         self._impl.init(self.parameters)
