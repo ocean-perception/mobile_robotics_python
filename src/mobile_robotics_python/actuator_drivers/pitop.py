@@ -1,3 +1,5 @@
+import weakref
+
 from pitop.robotics.drive_controller import DriveController
 
 from mobile_robotics_python import Console
@@ -7,7 +9,9 @@ from . import ActuatorDriverBase
 
 
 class PiTopMotors(ActuatorDriverBase):
-    def __init__(self):
+    def __init__(self, parent):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.ready = False
         self.name = "pitop_motors"
 

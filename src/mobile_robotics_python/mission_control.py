@@ -1,3 +1,5 @@
+import weakref
+
 import numpy as np
 import yaml
 
@@ -5,7 +7,9 @@ from mobile_robotics_python.messages import RobotStateMessage
 
 
 class MissionControl:
-    def __init__(self, mission_config, missions_path):
+    def __init__(self, mission_config, missions_path, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.filename = missions_path / mission_config.name
         if not self.filename.exists():
             raise FileNotFoundError(f"Mission file {self.filename} not found")

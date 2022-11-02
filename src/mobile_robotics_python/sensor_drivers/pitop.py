@@ -1,3 +1,5 @@
+import weakref
+
 import numpy as np
 from pitop import EncoderMotor, ForwardDirection, Pitop
 from pitop.pma.imu import IMU
@@ -10,7 +12,9 @@ from . import SensorDriverBase
 
 
 class PiTopCompass(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.ready = False
         try:
             self._imu = IMU()
@@ -52,7 +56,9 @@ def create_encoder(params):
 
 
 class PiTopEncoder(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self._left_encoder = create_encoder(params["left"])
         self._right_encoder = create_encoder(params["right"])
         self.wheel_separation = params["wheel_separation"]
@@ -98,7 +104,9 @@ class PiTopEncoder(SensorDriverBase):
 
 
 class PiTopBattery(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.ready = False
         try:
             self._battery = Pitop().battery
@@ -115,7 +123,9 @@ class PiTopBattery(SensorDriverBase):
 
 
 class PiTopScreen(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.ready = False
         try:
             self._device = Pitop()

@@ -1,3 +1,5 @@
+import weakref
+
 import numpy as np
 
 from mobile_robotics_python.messages import RobotStateMessage, SpeedRequestMessage
@@ -17,7 +19,7 @@ def sign_with_zero(value):
 
 
 class NaiveRotateMove(NavigationSolutionBase):
-    def __init__(self, parameters):
+    def __init__(self, parameters, parent=None):
         """Initialise the naive rotate move algorithm.
 
         Parameters
@@ -25,6 +27,8 @@ class NaiveRotateMove(NavigationSolutionBase):
         parameters : dict
             Configuration parameters for the naive rotate move algorithm.
         """
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.parameters = parameters
         self.orientation_threshold = parameters["orientation_threshold"]
         self.rotation_speed = parameters["rotation_speed"]

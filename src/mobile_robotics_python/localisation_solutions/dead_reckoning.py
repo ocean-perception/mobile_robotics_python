@@ -1,3 +1,4 @@
+import weakref
 from typing import Optional
 
 from mobile_robotics_python.messages import RobotStateMessage
@@ -6,7 +7,9 @@ from . import LocalisationSolutionBase
 
 
 class DeadReckoning(LocalisationSolutionBase):
-    def __init__(self, parameters, initial_state: Optional[RobotStateMessage] = None):
+    def __init__(
+        self, parameters, initial_state: Optional[RobotStateMessage] = None, parent=None
+    ):
         """Initialise the dead reckoning algorithm.
 
         Parameters
@@ -16,6 +19,8 @@ class DeadReckoning(LocalisationSolutionBase):
         initial_state : RobotStateMessage, optional
             Initial state, by default initialised to zeroes.
         """
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.parameters = parameters
         if initial_state is None:
             self.state = RobotStateMessage()

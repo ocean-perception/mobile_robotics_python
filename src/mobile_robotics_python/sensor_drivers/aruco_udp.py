@@ -1,5 +1,6 @@
 import json
 import socket
+import weakref
 from threading import Thread
 
 from mobile_robotics_python.messages import RobotStateMessage
@@ -8,7 +9,9 @@ from . import SensorDriverBase
 
 
 class ArUcoUDP(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         # -- UDP
         self.client = socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP

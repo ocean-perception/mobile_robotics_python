@@ -2,6 +2,7 @@ from pathlib import Path
 
 from .configuration import Configuration
 from .localisation import Localisation
+from .messages import RobotStateMessage
 from .mission_control import MissionControl
 from .motors import Motors
 from .navigation import Navigation
@@ -9,7 +10,6 @@ from .sensors import Battery, Compass, Encoder, ExternalPositioning, Lidar, Scre
 from .tools import Console
 from .tools.pose import PoseManager
 from .tools.rate import Rate
-from .messages import RobotStateMessage
 
 
 class Robot:
@@ -30,38 +30,46 @@ class Robot:
 
         # Check for sensors:
         if config.sensors.lidar is not None:
-            self.lidar = Lidar(config.sensors.lidar, config.logging_folder)
+            self.lidar = Lidar(config.sensors.lidar, config.logging_folder, parent=self)
             self.poses.add_transform(self.lidar.pose, "lidar")
         if config.sensors.compass is not None:
-            self.compass = Compass(config.sensors.compass, config.logging_folder)
+            self.compass = Compass(
+                config.sensors.compass, config.logging_folder, parent=self
+            )
             self.poses.add_transform(self.compass.pose, "compass")
         if config.sensors.encoder is not None:
-            self.encoder = Encoder(config.sensors.encoder, config.logging_folder)
+            self.encoder = Encoder(
+                config.sensors.encoder, config.logging_folder, parent=self
+            )
             self.poses.add_transform(self.encoder.pose, "encoder")
         if config.sensors.external_positioning is not None:
             self.external_positioning = ExternalPositioning(
-                config.sensors.external_positioning, config.logging_folder
+                config.sensors.external_positioning, config.logging_folder, parent=self
             )
             self.poses.add_transform(
                 self.external_positioning.pose, "external_positioning"
             )
         if config.sensors.battery is not None:
-            self.battery = Battery(config.sensors.battery, config.logging_folder)
+            self.battery = Battery(
+                config.sensors.battery, config.logging_folder, parent=self
+            )
         if config.sensors.screen is not None:
-            self.screen = Screen(config.sensors.screen, config.logging_folder)
+            self.screen = Screen(
+                config.sensors.screen, config.logging_folder, parent=self
+            )
 
         # Create controllers
         self.localisation = Localisation(
-            config.control.localisation, config.logging_folder
+            config.control.localisation, config.logging_folder, parent=self
         )
-        self.navigation = Navigation(config.control.navigation)
+        self.navigation = Navigation(config.control.navigation, parent=self)
         self.mission_control = MissionControl(
             config.control.mission,
             Path(config.filename).parent / "missions",
         )
 
         # Create motors
-        self.motors = Motors(config.motors, config.logging_folder)
+        self.motors = Motors(config.motors, config.logging_folder, parent=self)
 
     def run(self):
         Console.info("Running robot...")
@@ -96,8 +104,8 @@ class Robot:
                 measurements.sort(key=lambda x: x[0].stamp_s)
                 for measurement in measurements:
                     measurement_value = measurement[0]
-                    measurement_transform = measurement[1]
-                    measurement_name = measurement[2]
+                    # measurement_transform = measurement[1]
+                    # measurement_name = measurement[2]
                     self.state = self.localisation.update(measurement_value)
 
             self.mission_control.update(self.state)

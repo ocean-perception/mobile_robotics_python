@@ -1,16 +1,21 @@
 from .configuration import SensorConfiguration
 from .messages import LaserScanMessage, RobotStateMessage, SpeedRequestMessage
 from .sensor_drivers.aruco_udp import ArUcoUDP
-
 from .sensor_drivers.rplidar import RPLidar
 from .sensor_drivers.sense_hat import SenseHatCompass, SenseHatScreen
 from .tools import Console, Logger, Pose
 
-
 try:
-    from .sensor_drivers.pitop import PiTopBattery, PiTopCompass, PiTopEncoder, PiTopScreen
-except ImportError as e:
+    from .sensor_drivers.pitop import (
+        PiTopBattery,
+        PiTopCompass,
+        PiTopEncoder,
+        PiTopScreen,
+    )
+except ImportError:
     pass
+
+import weakref
 
 
 class BaseLoggable:
@@ -19,7 +24,10 @@ class BaseLoggable:
         config: SensorConfiguration,
         logging_folder: str,
         message_type="RobotStateMessage",
+        parent=None,
     ):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.logger = Logger(config.name, logging_folder)
         self._message_type = message_type
         if message_type == "RobotStateMessage":
@@ -143,7 +151,7 @@ class BaseSensor(BaseLoggable):
         config : SensorConfiguration
             Configuration for the sensor read from the YAML file
         """
-        super().__init__(config, logging_folder, message_type=message_type)
+        super().__init__(config, logging_folder, parent=self, message_type=message_type)
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters
@@ -157,7 +165,9 @@ class BaseSensor(BaseLoggable):
 
 class Lidar(BaseSensor):
     def __init__(self, config: SensorConfiguration, logging_folder: str):
-        super().__init__(config, logging_folder, message_type="LaserScanMessage")
+        super().__init__(
+            config, logging_folder, parent=self, message_type="LaserScanMessage"
+        )
         if self.driver == "rplidar":
             self._impl = RPLidar(self.parameters)
         else:
@@ -171,7 +181,7 @@ class Lidar(BaseSensor):
 
 class Compass(BaseSensor):
     def __init__(self, config: SensorConfiguration, logging_folder: str):
-        super().__init__(config, logging_folder)
+        super().__init__(config, logging_folder, parent=self)
         if self.driver == "pitop_compass":
             self._impl = PiTopCompass(self.parameters)
         elif self.driver == "sensehat_compass":
@@ -187,7 +197,7 @@ class Compass(BaseSensor):
 
 class Encoder(BaseSensor):
     def __init__(self, config: SensorConfiguration, logging_folder: str):
-        super().__init__(config, logging_folder)
+        super().__init__(config, logging_folder, parent=self)
         if self.driver == "pitop_encoder":
             self._impl = PiTopEncoder(self.parameters)
         else:
@@ -201,7 +211,7 @@ class Encoder(BaseSensor):
 
 class ExternalPositioning(BaseSensor):
     def __init__(self, config: SensorConfiguration, logging_folder: str):
-        super().__init__(config, logging_folder)
+        super().__init__(config, logging_folder, parent=self)
         if self.driver == "aruco_udp":
             self._impl = ArUcoUDP(self.parameters)
         else:
@@ -215,7 +225,7 @@ class ExternalPositioning(BaseSensor):
 
 class Battery(BaseSensor):
     def __init__(self, config: SensorConfiguration, logging_folder: str):
-        super().__init__(config, logging_folder, has_pose=False)
+        super().__init__(config, logging_folder, parent=self, has_pose=False)
         if self.driver == "pitop_battery":
             self._impl = PiTopBattery(self.parameters)
         else:
@@ -229,7 +239,7 @@ class Battery(BaseSensor):
 
 class Screen(BaseSensor):
     def __init__(self, config: SensorConfiguration, logging_folder: str):
-        super().__init__(config, logging_folder, has_pose=False)
+        super().__init__(config, logging_folder, parent=self, has_pose=False)
         if self.driver == "pitop_screen":
             self._impl = PiTopScreen(self.parameters)
         elif self.driver == "sensehat_screen":

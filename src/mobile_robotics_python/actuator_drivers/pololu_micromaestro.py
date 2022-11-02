@@ -1,4 +1,5 @@
 import time
+import weakref
 
 import numpy as np
 
@@ -10,9 +11,11 @@ from .maestro_controller import Controller
 
 
 class PololuMicroMaestro(ActuatorDriverBase):
-    def __init__(self):
+    def __init__(self, parent=None):
         self.ready = False
         self.name = "pololu_motors"
+        if parent is not None:
+            self._parent = weakref.ref(parent)
 
     def init(self, params):
         try:
@@ -40,15 +43,6 @@ class PololuMicroMaestro(ActuatorDriverBase):
             Console.warn("    PololuMotors could not be initialised. Error:", e)
             return
 
-    def __del__(self):
-        Console.info("Stopping the motors...")
-        self._ctrl.setTarget(self.left_idx, 5600)
-        self._ctrl.setTarget(self.right_idx, 5600)
-        time.sleep(0.5)
-        self._ctrl.setTarget(self.left_idx, 5600)
-        self._ctrl.setTarget(self.right_idx, 5600)
-        time.sleep(0.5)
-
     def move(self, msg: SpeedRequestMessage):
         if not self.ready:
             Console.warn("    PololuMicroMaestro is not ready")
@@ -62,4 +56,11 @@ class PololuMicroMaestro(ActuatorDriverBase):
 
     def __del__(self):
         if self.ready:
+            Console.info("Stopping the motors...")
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(0.5)
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(0.5)
             self._ctrl.close()

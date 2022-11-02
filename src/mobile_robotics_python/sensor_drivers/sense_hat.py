@@ -1,3 +1,5 @@
+import weakref
+
 from mobile_robotics_python import Console
 from mobile_robotics_python.messages import RobotStateMessage
 
@@ -6,7 +8,9 @@ from .sense_hat_driver.sense_hat import SenseHat
 
 
 class SenseHatCompass(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.ready = False
         try:
             self._dev = SenseHat()
@@ -43,7 +47,9 @@ class SenseHatCompass(SensorDriverBase):
 
 
 class SenseHatScreen(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.ready = False
         try:
             self._dev = SenseHat()

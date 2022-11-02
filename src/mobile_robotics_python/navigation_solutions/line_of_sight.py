@@ -1,10 +1,12 @@
+import weakref
+
 from mobile_robotics_python.messages import RobotStateMessage, SpeedRequestMessage
 
 from . import NavigationSolutionBase
 
 
 class LineOfSight(NavigationSolutionBase):
-    def __init__(self, parameters):
+    def __init__(self, parameters, parent):
         """Initialise the algorithm.
 
         Parameters
@@ -13,6 +15,8 @@ class LineOfSight(NavigationSolutionBase):
             Configuration parameters for the naive rotate move algorithm.
         """
         self.parameters = parameters
+        if parent is not None:
+            self._parent = weakref.ref(parent)
 
     def compute_request(
         self, current_position: RobotStateMessage, desired_position: RobotStateMessage

@@ -67,7 +67,8 @@ class Pose:
 
     def get_transform(self):
         return pt.transform_from(
-                pr.active_matrix_from_intrinsic_euler_xyz(self._rpy) , self._xyz)
+            pr.active_matrix_from_intrinsic_euler_xyz(self._rpy), self._xyz
+        )
 
     def from_transform(self, transform):
         self._xyz = transform[:3, -1]

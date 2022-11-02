@@ -1,3 +1,5 @@
+import weakref
+
 from mobile_robotics_python import Console
 
 from .messages import RobotStateMessage, SpeedRequestMessage
@@ -6,7 +8,9 @@ from .navigation_solutions.naive_rotate_move import NaiveRotateMove
 
 
 class Navigation:
-    def __init__(self, config):
+    def __init__(self, config, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters

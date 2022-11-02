@@ -1,5 +1,6 @@
 import math
 import time
+import weakref
 from threading import Thread
 
 import numpy as np
@@ -438,7 +439,9 @@ class RPLidarImpl:
 
 
 class RPLidar(SensorDriverBase):
-    def __init__(self, params):
+    def __init__(self, params, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self._lidar = RPLidarImpl(
             serial_type="pyserial", port=params["port"], read_timeout=0.1
         )

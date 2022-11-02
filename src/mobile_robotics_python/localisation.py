@@ -1,3 +1,5 @@
+import weakref
+
 from mobile_robotics_python import Console
 
 from .localisation_solutions.dead_reckoning import DeadReckoning
@@ -9,8 +11,12 @@ from .sensors import BaseLoggable
 
 
 class Localisation(BaseLoggable):
-    def __init__(self, config, logging_folder):
-        super().__init__(config, logging_folder, message_type="RobotStateMessage")
+    def __init__(self, config, logging_folder, parent=None):
+        if parent is not None:
+            self._parent = weakref.ref(parent)
+        super().__init__(
+            config, logging_folder, parent=self, message_type="RobotStateMessage"
+        )
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters
