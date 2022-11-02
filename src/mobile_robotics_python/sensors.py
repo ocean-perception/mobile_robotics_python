@@ -1,10 +1,16 @@
 from .configuration import SensorConfiguration
 from .messages import LaserScanMessage, RobotStateMessage, SpeedRequestMessage
 from .sensor_drivers.aruco_udp import ArUcoUDP
-from .sensor_drivers.pitop import PiTopBattery, PiTopCompass, PiTopEncoder, PiTopScreen
+
 from .sensor_drivers.rplidar import RPLidar
 from .sensor_drivers.sense_hat import SenseHatCompass, SenseHatScreen
 from .tools import Console, Logger, Pose
+
+
+try:
+    from .sensor_drivers.pitop import PiTopBattery, PiTopCompass, PiTopEncoder, PiTopScreen
+except ImportError as e:
+    pass
 
 
 class BaseLoggable:
