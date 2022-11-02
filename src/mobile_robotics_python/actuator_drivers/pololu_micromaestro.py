@@ -37,8 +37,17 @@ class PololuMicroMaestro(ActuatorDriverBase):
 
             self.ready = True
         except Exception as e:
-            Console.warn("    PiTopMotors could not be initialised. Error:", e)
+            Console.warn("    PololuMotors could not be initialised. Error:", e)
             return
+
+    def __del__(self):
+        Console.info("Stopping the motors...")
+        self._ctrl.setTarget(self.left_idx, 5600)
+        self._ctrl.setTarget(self.right_idx, 5600)
+        time.sleep(0.5)
+        self._ctrl.setTarget(self.left_idx, 5600)
+        self._ctrl.setTarget(self.right_idx, 5600)
+        time.sleep(0.5)
 
     def move(self, msg: SpeedRequestMessage):
         if not self.ready:
@@ -49,7 +58,7 @@ class PololuMicroMaestro(ActuatorDriverBase):
         req = np.array([[msg.vx_mps], [msg.wz_radps]])
         rpm = self.tam @ req + 5600
         self._ctrl.setTarget(self.left_idx, int(rpm[0, 0]))
-        self._ctrl.setTarget(self.left_idx, int(rpm[1, 0]))
+        self._ctrl.setTarget(self.right_idx, int(rpm[1, 0]))
 
     def __del__(self):
         if self.ready:
