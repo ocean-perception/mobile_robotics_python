@@ -143,6 +143,7 @@ class BaseSensor(BaseLoggable):
         logging_folder: str,
         message_type="RobotStateMessage",
         has_pose=True,
+        parent=None,
     ):
         """Abstract class that defines the interface for all sensors.
 
@@ -152,6 +153,8 @@ class BaseSensor(BaseLoggable):
             Configuration for the sensor read from the YAML file
         """
         super().__init__(config, logging_folder, parent=self, message_type=message_type)
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         self.name = config.name
         self.driver = config.driver
         self.parameters = config.parameters
@@ -164,10 +167,12 @@ class BaseSensor(BaseLoggable):
 
 
 class Lidar(BaseSensor):
-    def __init__(self, config: SensorConfiguration, logging_folder: str):
+    def __init__(self, config: SensorConfiguration, logging_folder: str, parent=None):
         super().__init__(
             config, logging_folder, parent=self, message_type="LaserScanMessage"
         )
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         if self.driver == "rplidar":
             self._impl = RPLidar(self.parameters)
         else:
@@ -180,12 +185,14 @@ class Lidar(BaseSensor):
 
 
 class Compass(BaseSensor):
-    def __init__(self, config: SensorConfiguration, logging_folder: str):
+    def __init__(self, config: SensorConfiguration, logging_folder: str, parent=None):
         super().__init__(config, logging_folder, parent=self)
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         if self.driver == "pitop_compass":
-            self._impl = PiTopCompass(self.parameters)
+            self._impl = PiTopCompass(self.parameters, parent=parent)
         elif self.driver == "sensehat_compass":
-            self._impl = SenseHatCompass(self.parameters)
+            self._impl = SenseHatCompass(self.parameters, parent=parent)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
 
@@ -196,8 +203,10 @@ class Compass(BaseSensor):
 
 
 class Encoder(BaseSensor):
-    def __init__(self, config: SensorConfiguration, logging_folder: str):
+    def __init__(self, config: SensorConfiguration, logging_folder: str, parent=None):
         super().__init__(config, logging_folder, parent=self)
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         if self.driver == "pitop_encoder":
             self._impl = PiTopEncoder(self.parameters)
         else:
@@ -210,8 +219,10 @@ class Encoder(BaseSensor):
 
 
 class ExternalPositioning(BaseSensor):
-    def __init__(self, config: SensorConfiguration, logging_folder: str):
+    def __init__(self, config: SensorConfiguration, logging_folder: str, parent=None):
         super().__init__(config, logging_folder, parent=self)
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         if self.driver == "aruco_udp":
             self._impl = ArUcoUDP(self.parameters)
         else:
@@ -224,8 +235,10 @@ class ExternalPositioning(BaseSensor):
 
 
 class Battery(BaseSensor):
-    def __init__(self, config: SensorConfiguration, logging_folder: str):
+    def __init__(self, config: SensorConfiguration, logging_folder: str, parent=None):
         super().__init__(config, logging_folder, parent=self, has_pose=False)
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         if self.driver == "pitop_battery":
             self._impl = PiTopBattery(self.parameters)
         else:
@@ -238,8 +251,10 @@ class Battery(BaseSensor):
 
 
 class Screen(BaseSensor):
-    def __init__(self, config: SensorConfiguration, logging_folder: str):
+    def __init__(self, config: SensorConfiguration, logging_folder: str, parent=None):
         super().__init__(config, logging_folder, parent=self, has_pose=False)
+        if parent is not None:
+            self._parent = weakref.ref(parent)
         if self.driver == "pitop_screen":
             self._impl = PiTopScreen(self.parameters)
         elif self.driver == "sensehat_screen":
