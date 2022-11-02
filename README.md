@@ -9,7 +9,7 @@ Placeholder
 git clone git@github.com:ocean-perception/mobile_robotics_python.git
 cd mobile_robotics_python
 pip install -U --user -e .
-``
+```
 
 ## How to run
 
