@@ -37,6 +37,15 @@ class PololuMicroMaestro(ActuatorDriverBase):
             self._ctrl.setTarget(self.left_idx, 5600)
             self._ctrl.setTarget(self.right_idx, 5600)
             time.sleep(0.5)
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(7.0)
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(0.5)
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(0.5)
 
             self.ready = True
         except Exception as e:
@@ -57,6 +66,13 @@ class PololuMicroMaestro(ActuatorDriverBase):
     def __del__(self):
         if self.ready:
             Console.info("Stopping the motors...")
+            # For ESC to boot, we need to stop at neutral
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(0.5)
+            self._ctrl.setTarget(self.left_idx, 5600)
+            self._ctrl.setTarget(self.right_idx, 5600)
+            time.sleep(7.0)
             self._ctrl.setTarget(self.left_idx, 5600)
             self._ctrl.setTarget(self.right_idx, 5600)
             time.sleep(0.5)
