@@ -37,7 +37,6 @@ def run_setup():
             "numpy",
             "matplotlib",
             "pytransform3d",
-            "pitop",
             "pydantic",
             "paramiko",
         ],
