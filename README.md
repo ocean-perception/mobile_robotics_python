@@ -1,6 +1,6 @@
 # Mobile robotics python
 
-This repository holds the codebase for Maritime robotics and Interlligent mobile robotics. The software has been designed as a set of modular classes to enable interoperability between different robot and sensor types.
+This repository holds the codebase for maritime robotics and intelligent mobile robotics. The software has been designed as a set of modular classes to enable interoperability between different robot and sensor types.
 
 ## How to remotely connect to your MR kits
  - Install [RealVNC viewer](https://www.realvnc.com/en/connect/download/viewer/) in your laptop or machine your are going to use to remotely login to the kit.
