@@ -1,6 +1,7 @@
 from .configuration import SensorConfiguration
 from .messages import LaserScanMessage, RobotStateMessage, SpeedRequestMessage
 from .sensor_drivers.aruco_udp import ArUcoUDP
+from .sensor_drivers.qualisys import Qualisys
 from .sensor_drivers.rplidar import RPLidar
 from .sensor_drivers.sense_hat import SenseHatCompass, SenseHatScreen
 from .tools import Console, Logger, Pose
@@ -225,6 +226,8 @@ class ExternalPositioning(BaseSensor):
             self._parent = weakref.ref(parent)
         if self.driver == "aruco_udp":
             self._impl = ArUcoUDP(self.parameters)
+        elif self.driver == "qualisys":
+            self._impl = Qualisys(self.parameters)
         else:
             Console.error(f"Unknown compass driver {self.driver}")
 
