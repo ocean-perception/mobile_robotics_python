@@ -58,6 +58,36 @@ mobile_robotics_python -c path/to/configuration/file.yaml
  - To implement a new navigation driver: use the template in `src/mobile_robotics_python/navigation_solutions` named `line_of_sight.py`. 
  - To modify the main robot behaviour: modify the `Robot` class in the file `src/mobile_robotics_python/robot.py`.
 
+## How to update to the latest version
+To pull the changes from github, first you need to save any local changes with git, update your code to the same github version and then reapply your changes on top.
+
+First, open a terminal window in your raspberry pi and navigate to the directory of this repository. You can do it by typing the following:
+
+```bash
+cd ~/git/mobile_robotics_python
+```
+
+then, lets save any local changes you might have
+
+```bash
+git stash
+```
+
+This command should return a sentence starting with `Saved working directory [...]`.
+
+Then, pull any changes from the remote
+
+```bash
+git pull
+```
+
+And recover your changes we saved before with
+
+```bash
+git stash pop
+```
+
+This command should return about half a dozen lines starting with `On branch main [...]`.
 
 ## How to install
 
