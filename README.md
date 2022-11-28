@@ -1,15 +1,13 @@
 # Mobile robotics python
 
-Placeholder
+This repository holds the codebase for maritime robotics and intelligent mobile robotics. The software has been designed as a set of modular classes to enable interoperability between different robot and sensor types.
 
-
-## How to install
-
-```bash
-git clone git@github.com:ocean-perception/mobile_robotics_python.git
-cd mobile_robotics_python
-pip install -U --user -e .
-```
+## How to remotely connect to your MR kits
+ - Install [RealVNC viewer](https://www.realvnc.com/en/connect/download/viewer/) in your laptop or machine your are going to use to remotely login to the kit.
+ - Connect your laptop to a wifi network called "oplab-net". If you are working in a lab session with teachers, we will bring a wireless router that is configured. If you are working on your own, you can use your mobile phone to create a "hotspot". Configure it with a network name "oplab-net" and no password. Your raspberry will connect to this network if available. Make sure you connect your laptop to this wifi.
+ - Turn on your raspberry, either via the battery or via the mains plug.
+ - Open RealVNC viewer and setup a new connection to the hostname "sess6072-X.local", where "X" is your kit number (1 to 6).
+ - When prompted for a username and password, use "robot" and "qwerty" respectively.
 
 ## How to run
 
@@ -61,7 +59,13 @@ mobile_robotics_python -c path/to/configuration/file.yaml
  - To modify the main robot behaviour: modify the `Robot` class in the file `src/mobile_robotics_python/robot.py`.
 
 
+## How to install
 
-### Notes
-How to fix IP address: https://www.ionos.co.uk/digitalguide/server/configuration/provide-raspberry-pi-with-a-static-ip-address/ 
-Wireless access point: https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/
+Note: this software is already installed in your kits. You do not need to install it again.
+
+```bash
+git clone git@github.com:ocean-perception/mobile_robotics_python.git
+cd mobile_robotics_python
+pip install -U --user -e .
+```
+
