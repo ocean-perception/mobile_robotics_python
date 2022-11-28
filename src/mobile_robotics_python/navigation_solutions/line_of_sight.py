@@ -19,7 +19,10 @@ class LineOfSight(NavigationSolutionBase):
             self._parent = weakref.ref(parent)
 
     def compute_request(
-        self, current_position: RobotStateMessage, desired_position: RobotStateMessage
+        self,
+        current_position: RobotStateMessage,
+        previous_waypoint: RobotStateMessage,
+        next_waypoint: RobotStateMessage,
     ) -> SpeedRequestMessage:
         """Computes the speed request to move from the current position to the desired position.
 
@@ -27,8 +30,10 @@ class LineOfSight(NavigationSolutionBase):
         ----------
         current_position : RobotStateMessage
             Current position.
-        desired_position : RobotStateMessage
-            Desired position.
+        previous_waypoint : RobotStateMessage
+            Previous waypoint.
+        next_waypoint : RobotStateMessage
+            Next waypoint.
 
         Returns
         -------

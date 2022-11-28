@@ -14,7 +14,10 @@ class NavigationSolutionBase(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def compute_request(
-        self, current_position: RobotStateMessage, desired_position: RobotStateMessage
+        self,
+        current_position: RobotStateMessage,
+        previous_waypoint: RobotStateMessage,
+        next_waypoint: RobotStateMessage,
     ) -> SpeedRequestMessage:
         """Extract text from the data set"""
         raise NotImplementedError

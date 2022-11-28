@@ -22,6 +22,11 @@ class Navigation:
             Console.error(f"Unknown localisation solution {self.driver}")
 
     def compute_request(
-        self, current_position: RobotStateMessage, desired_position: RobotStateMessage
+        self,
+        current_position: RobotStateMessage,
+        previous_waypoint: RobotStateMessage,
+        next_waypoint: RobotStateMessage,
     ) -> SpeedRequestMessage:
-        return self._impl.compute_request(current_position, desired_position)
+        return self._impl.compute_request(
+            current_position, previous_waypoint, next_waypoint
+        )

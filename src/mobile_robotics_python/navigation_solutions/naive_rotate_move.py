@@ -35,7 +35,10 @@ class NaiveRotateMove(NavigationSolutionBase):
         self.linear_speed = parameters["linear_speed"]
 
     def compute_request(
-        self, current_position: RobotStateMessage, desired_position: RobotStateMessage
+        self,
+        current_position: RobotStateMessage,
+        previous_waypoint: RobotStateMessage,
+        next_waypoint: RobotStateMessage,
     ) -> SpeedRequestMessage:
         """Computes the speed request to move from the current position to the desired position.
 
@@ -43,16 +46,18 @@ class NaiveRotateMove(NavigationSolutionBase):
         ----------
         current_position : RobotStateMessage
             Current position.
-        desired_position : RobotStateMessage
-            Desired position.
+        previous_waypoint : RobotStateMessage
+            Previous waypoint.
+        next_waypoint : RobotStateMessage
+            Next waypoint.
 
         Returns
         -------
         SpeedRequestMessage
             Speed request.
         """
-        diff_x = desired_position.x_m - current_position.x_m
-        diff_y = desired_position.y_m - current_position.y_m
+        diff_x = next_waypoint.x_m - current_position.x_m
+        diff_y = next_waypoint.y_m - current_position.y_m
         desired_theta = np.arctan2(diff_y, diff_x)
         diff_theta = desired_theta - current_position.yaw_rad
         distance = (diff_x**2 + diff_y**2) ** 0.5
