@@ -20,7 +20,7 @@ class Logger:
         return str(stamp)
 
     def set_header(self, header):
-        self.file.write("stamp," + str(header) + "\n")
+        self.file.write("stamp," + ",".join(header) + "\n")
 
     def log(self, *argv):
         arg_str = ""
