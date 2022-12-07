@@ -37,6 +37,16 @@ class MissionControl:
         msg.y_m = self.waypoints[self.current_waypoint, 1]
         return msg
 
+    @property
+    def previous_waypoint(self) -> RobotStateMessage:
+        msg = RobotStateMessage()
+        if len(self.waypoints) == 1:
+            return msg
+        else:
+            msg.x_m = self.waypoints[self.current_waypoint - 1, 0]
+            msg.y_m = self.waypoints[self.current_waypoint - 1, 1]
+        return msg
+
     def next(self):
         self.current_waypoint += 1
         if self.current_waypoint >= len(self.waypoints):

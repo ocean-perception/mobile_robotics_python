@@ -110,7 +110,9 @@ class Robot:
 
             self.mission_control.update(self.state)
             speed_request = self.navigation.compute_request(
-                self.state, self.mission_control.waypoint
+                self.state,
+                self.mission_control.previous_waypoint,
+                self.mission_control.waypoint,
             )
             self.motors.move(speed_request)
 
