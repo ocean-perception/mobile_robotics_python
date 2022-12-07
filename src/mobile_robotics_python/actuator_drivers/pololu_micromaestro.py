@@ -62,6 +62,7 @@ class PololuMicroMaestro(ActuatorDriverBase):
         rpm = self.tam @ req + 5600
         self._ctrl.setTarget(self.left_idx, int(rpm[0, 0]))
         self._ctrl.setTarget(self.right_idx, int(rpm[1, 0]))
+        return msg
 
     def __del__(self):
         if self.ready:
