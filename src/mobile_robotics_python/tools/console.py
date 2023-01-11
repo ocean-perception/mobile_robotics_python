@@ -273,7 +273,7 @@ class Console:
         filename = folder_path / "{}_console_log.log".format(stamp)
         fh = logging.FileHandler(filename)
         formatter = logging.Formatter(
-            fmt="%(asctime)s %(levelname)-8s %(message)s",
+            fmt="%(asctime)s | %(levelname)8s | %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
         fh.setFormatter(formatter)

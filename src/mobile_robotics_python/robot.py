@@ -100,7 +100,6 @@ class Robot:
             # Update navigation
             if len(measurements) > 0:
                 # Sort measurements by timestamp
-                print(measurements)
                 measurements.sort(key=lambda x: x[0].stamp_s)
                 for measurement in measurements:
                     measurement_value = measurement[0]
@@ -115,5 +114,17 @@ class Robot:
                 self.mission_control.waypoint,
             )
             self.motors.move(speed_request)
-
+            self.print()
             r.sleep()
+
+    def print(self):
+        """Prints the robot position, orientation and current waypoint."""
+        msg = "({:.2f}, {:.2f}, {:.2f})".format(
+            self.state.x_m, self.state.y_m, self.state.yaw_rad * 180 / 3.14159
+        )
+        msg += " -> [{}] ({:.2f}, {:.2f})".format(
+            self.mission_control.current_waypoint,
+            self.mission_control.waypoint.x_m,
+            self.mission_control.waypoint.y_m,
+        )
+        Console.info(msg)
