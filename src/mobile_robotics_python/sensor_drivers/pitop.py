@@ -1,6 +1,7 @@
 import weakref
 
 import numpy as np
+import math
 from pitop import EncoderMotor, ForwardDirection, Pitop
 from pitop.pma.imu import IMU
 
@@ -97,8 +98,8 @@ class PiTopEncoder(SensorDriverBase):
 
         msg = RobotStateMessage()
         msg.stamp_s = (ts + self.previous_stamp) / 2
-        msg.vx_mps = linear_velocity * np.cos(robot_state.yaw_rad)
-        msg.vy_mps = linear_velocity * np.sin(robot_state.yaw_rad)
+        msg.vx_mps = linear_velocity * math.cos(robot_state.yaw_rad)
+        msg.vy_mps = linear_velocity * math.sin(robot_state.yaw_rad)
         msg.wz_radps = angular_velocity
         return msg
 

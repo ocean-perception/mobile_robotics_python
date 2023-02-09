@@ -19,6 +19,7 @@ class Robot:
         self.poses = PoseManager()
         self._config = config
         self.state = RobotStateMessage()
+        self.state.all_zero()
 
         Console.info("Initializing robot", config.robot_name, "...")
 

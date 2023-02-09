@@ -67,6 +67,7 @@ class NaiveRotateMove(NavigationSolutionBase):
         msg.wz_radps = 0
         if abs(diff_theta) > self.orientation_threshold:
             msg.wz_radps = self.rotation_speed * sign_with_zero(diff_theta)
+            return msg
         if distance > 0:
             # Only move forward
             msg.vx_mps = self.linear_speed

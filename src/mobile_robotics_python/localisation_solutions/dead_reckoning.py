@@ -1,5 +1,6 @@
 import weakref
 from typing import Optional
+import numpy as np
 
 from mobile_robotics_python.messages import RobotStateMessage
 
