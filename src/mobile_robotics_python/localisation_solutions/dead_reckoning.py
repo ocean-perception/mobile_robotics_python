@@ -46,6 +46,7 @@ class DeadReckoning(LocalisationSolutionBase):
         self.state.stamp_s = stamp_s
         self.state.x_m = self.state.x_m + (self.state.vx_mps * np.cos(self.state.yaw_rad) - self.state.vy_mps * np.sin(self.state.yaw_rad) )* dt_s
         self.state.y_m = self.state.y_m + (self.state.vx_mps * np.sin(self.state.yaw_rad) + self.state.vy_mps * np.cos(self.state.yaw_rad) )* dt_s
+        self.state.yaw_rad += self.state.wz_radps*dt_s
         return self.state
 
     def update(self, msg: RobotStateMessage) -> RobotStateMessage:

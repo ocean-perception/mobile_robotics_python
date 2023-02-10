@@ -17,6 +17,13 @@ def sign_with_zero(value):
     elif value > 0:
         return 1
 
+#def check_angle(desired ,current):
+ #   if current <= np.pi:
+  #      diff_theta = desired - current
+   # if current > np.pi:
+    #    diff_theta = desired - current + 2*np.pi
+    #return diff_theta
+
 
 class NaiveRotateMove(NavigationSolutionBase):
     def __init__(self, parameters, parent=None):
@@ -60,6 +67,10 @@ class NaiveRotateMove(NavigationSolutionBase):
         diff_y = next_waypoint.y_m - current_position.y_m
         desired_theta = np.arctan2(diff_y, diff_x)
         diff_theta = desired_theta - current_position.yaw_rad
+        #print("----------------this the difference in angle 1 is -----------------", diff_theta)
+        if diff_theta < -np.pi:
+            diff_theta = diff_theta + 2*np.pi
+        #print("----------------this the difference in angle 2 is -----------------", diff_theta)
         distance = (diff_x**2 + diff_y**2) ** 0.5
         msg = SpeedRequestMessage()
         msg.stamp_s = get_utc_stamp()

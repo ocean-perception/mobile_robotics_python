@@ -83,7 +83,7 @@ class Robot:
             if self.compass is not None:
                 msg = self.compass.read(self.state)
                 transform = self.poses.get_transform("compass")
-                measurements.append((msg, transform, "compass"))
+                #measurements.append((msg, transform, "compass"))
             if self.encoder is not None:
                 msg = self.encoder.read(self.state)
                 transform = self.poses.get_transform("encoder")

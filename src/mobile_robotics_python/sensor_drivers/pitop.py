@@ -98,8 +98,8 @@ class PiTopEncoder(SensorDriverBase):
 
         msg = RobotStateMessage()
         msg.stamp_s = (ts + self.previous_stamp) / 2
-        msg.vx_mps = linear_velocity * math.cos(robot_state.yaw_rad)
-        msg.vy_mps = linear_velocity * math.sin(robot_state.yaw_rad)
+        msg.vx_mps = linear_velocity
+        msg.vy_mps = 0
         msg.wz_radps = angular_velocity
         return msg
 
